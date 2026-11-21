@@ -4,89 +4,93 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Delal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;600;700&display=swap">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{--bg:#eef2f7;--card:#fff;--ink:#0f1b2d;--mute:#6a7688;--line:#e2e8f0;--soft:#f4f7fb;
---blue:#2563eb;--green:#16a34a;--amber:#f59e0b;--violet:#7c3aed;--coral:#ef4444;--navy:#0b1730;--gold:#ffc24b}
-[data-theme=dark]{--bg:#0b1220;--card:#141d2e;--ink:#eef2f8;--mute:#93a0b5;--line:#243049;--soft:#1a2539;
---blue:#5b9bff;--green:#4ade80;--amber:#fbbf24;--violet:#a78bfa;--coral:#ff7b7b;--navy:#0a1a3a}
+:root{--bg:#f3f1fb;--card:#fff;--ink:#17142b;--mute:#6f6c85;--line:#e8e5f4;--soft:#f6f4fd;--p:#6d5dfc;--p2:#a855f7;--grad:linear-gradient(135deg,#5b4bf5,#9b4dfa);
+--blue:#4f6bff;--green:#10b981;--amber:#f59e0b;--violet:#8b5cf6;--coral:#f43f5e;--gold:#ffd166;--sh:0 10px 30px -14px rgba(76,61,240,.35)}
+[data-theme=dark]{--bg:#0d0b1c;--card:#171430;--ink:#f1effc;--mute:#9a97b4;--line:#2a2647;--soft:#1e1a3a;--blue:#7c93ff;--green:#34d399;--amber:#fbbf24;--violet:#a78bfa;--coral:#fb7185;--sh:0 10px 30px -14px rgba(0,0,0,.6)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,'Noto Sans Ethiopic',system-ui,-apple-system,sans-serif;padding-bottom:calc(170px + env(safe-area-inset-bottom,0px))}
 .i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,currentColor 14%,transparent)}
+.ic{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,currentColor 14%,transparent)}
 .blue{color:var(--blue)}.green{color:var(--green)}.amber{color:var(--amber)}.violet{color:var(--violet)}.coral{color:var(--coral)}
-.hero{margin:12px 14px;padding:18px;border-radius:22px;color:#fff;background:radial-gradient(120% 140% at 100% 0,#2b5bd7 0,transparent 55%),linear-gradient(160deg,var(--navy),#10285a)}
-.hero .top{display:flex;justify-content:space-between;align-items:center}
-.hero small{opacity:.75}.hero .amt{font-size:32px;font-weight:800;color:var(--gold);letter-spacing:-.5px;line-height:1.15}
-.hero .brand{font-weight:800;letter-spacing:.3px;opacity:.9}
-.pills{display:flex;gap:8px;margin-top:12px}
-.pill2{flex:1;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);font-size:12px}
-.pill2 b{display:block;font-size:17px}
-.hero .acts{display:flex;gap:10px;margin-top:12px}
-.hero button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font:inherit;font-size:14px}
+.hero{position:relative;overflow:hidden;margin:12px 14px;padding:20px;border-radius:28px;color:#fff;background:linear-gradient(135deg,#4637e8,#8b3ff5 58%,#d946ef);box-shadow:0 18px 40px -16px rgba(91,75,245,.7)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.12)}
+.hero:before{width:180px;height:180px;right:-50px;top:-60px}.hero:after{width:120px;height:120px;left:-40px;bottom:-50px}
+.hero>*{position:relative;z-index:1}
+.hero .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.brand{font-weight:800;font-size:19px;letter-spacing:.2px}.brand em{font-style:normal;font-weight:600;opacity:.8;font-size:15px;margin-left:4px}
+.lg{padding:6px 12px;border-radius:99px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);font-size:12.5px;font-weight:700;cursor:pointer}
+.hero small{opacity:.8}.amt{font-size:34px;font-weight:800;color:var(--gold);letter-spacing:-.5px;line-height:1.15}
+.pills{display:flex;gap:8px;margin-top:14px}
+.pill2{flex:1;padding:9px 11px;border-radius:14px;background:rgba(255,255,255,.14);backdrop-filter:blur(6px);font-size:12px}
+.pill2 b{display:block;font-size:18px}
+.acts{display:flex;gap:10px;margin-top:14px}
+.acts button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border-radius:14px;border:0;background:#fff;color:#4a3bd8;font:inherit;font-size:14px;font-weight:700}
+.acts button.g{background:rgba(255,255,255,.18);color:#fff}
 main{padding:0 14px}
-.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(15,27,45,.06)}
-.sh{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.sh h2{margin:0;font-size:16px}.sh p{margin:0;font-size:12.5px;color:var(--mute)}
-.num{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
-label.l{display:block;font-size:13px;color:var(--mute);margin:12px 0 6px}
-input,textarea{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--soft);color:var(--ink);font:inherit;outline:0}
-input:focus,textarea:focus{border-color:var(--blue)}
+.card{background:var(--card);border-radius:24px;padding:18px;margin-bottom:14px;box-shadow:var(--sh);animation:up .35s both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.sh h2{margin:0;font-size:16.5px}.sh p{margin:0;font-size:12.5px;color:var(--mute)}
+.num{width:28px;height:28px;border-radius:10px;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+label.l{display:block;font-size:13px;font-weight:600;color:var(--mute);margin:14px 0 6px}
+input,textarea,select{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--soft);color:var(--ink);font:inherit;outline:0;transition:.15s}
+input:focus,textarea:focus{border-color:var(--p);box-shadow:0 0 0 4px color-mix(in srgb,var(--p) 15%,transparent)}
 textarea{min-height:110px;resize:vertical}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;font-size:14px}
-.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.seg{display:flex;background:var(--soft);border-radius:12px;padding:4px;gap:4px}
-.seg button{flex:1;padding:10px;border:0;border-radius:9px;background:none;color:var(--mute);font:inherit;font-weight:600}
-.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.btn{width:100%;margin-top:14px;padding:14px;border:0;border-radius:14px;background:var(--blue);color:#fff;font:inherit;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn:disabled{opacity:.5}.btn.soft{background:var(--soft);color:var(--ink)}
-.bubble{background:var(--soft);border-radius:14px 14px 14px 4px;padding:8px;margin-top:10px;max-width:92%;word-break:break-word;font-size:14px}
-.bubble img{width:100%;border-radius:10px;display:block;margin-bottom:6px}
-.bubble .t{padding:2px 6px 4px}.bubble .hint{color:var(--mute)}
-.search{position:relative;margin-bottom:10px}.search .i{position:absolute;left:12px;top:12px;color:var(--mute)}.search input{padding-left:40px}
-.ch{display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--line);border-radius:14px;margin-bottom:8px}
-.ch.on{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 8%,transparent)}
-.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none}
-.ch .m{flex:1;min-width:0}.ch .m b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ch .m small{color:var(--mute)}
+.chip{padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;font-size:13.5px;font-weight:500}
+.chip.on{background:var(--grad);border-color:transparent;color:#fff}
+.hs{display:flex;gap:8px;overflow-x:auto;margin:0 -2px 10px;padding:2px;scrollbar-width:none}.hs::-webkit-scrollbar{display:none}.hs .chip{white-space:nowrap}
+.seg{display:flex;background:var(--soft);border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;padding:10px;border:0;border-radius:11px;background:none;color:var(--mute);font:inherit;font-weight:600}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.btn{width:100%;margin-top:14px;padding:15px;border:0;border-radius:16px;background:var(--grad);color:#fff;font:inherit;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 22px -10px rgba(91,75,245,.8)}
+.btn:disabled{opacity:.5}.btn.soft{background:var(--soft);color:var(--ink);box-shadow:none}.btn.sm{padding:10px;margin-top:8px;font-size:13.5px;border-radius:12px}
+.btn.green{background:linear-gradient(135deg,#059669,#10b981);color:#fff}.btn.red{background:color-mix(in srgb,var(--coral) 14%,transparent);color:var(--coral);box-shadow:none}
+.two{display:flex;gap:8px}.two .btn{margin-top:8px}
+.bubble{background:var(--soft);border-radius:18px 18px 18px 4px;padding:8px;margin-top:6px;max-width:94%;word-break:break-word;font-size:14px}
+.bubble img{width:100%;border-radius:12px;display:block;margin-bottom:6px}.bubble .t{padding:2px 6px 4px}.bubble .hint{color:var(--mute)}
+.bubble .bt{margin:6px 4px 2px;padding:8px;text-align:center;border-radius:10px;background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--blue);font-weight:600}
+.search{position:relative;margin-bottom:10px}.search .i{position:absolute;left:13px;top:14px;color:var(--mute)}.search input{padding-left:42px}
+.ch{display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--line);border-radius:18px;margin-bottom:8px;transition:.15s}
+.ch.on{border-color:var(--p);background:color-mix(in srgb,var(--p) 9%,transparent);transform:scale(.99)}
+.av{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;color:#fff;font-weight:700;flex:none}
+.ch .m{flex:1;min-width:0}.ch .m b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ch .m small{color:var(--mute)}
 .pr{text-align:right}.pr b{color:var(--amber);display:block;line-height:1.2}.pr small{color:var(--mute);font-size:11px}
-.tick{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:#fff;flex:none}
-.ch.on .tick{background:var(--blue);border-color:var(--blue)}.tick .i{width:14px;height:14px;stroke-width:3}
-.toggle{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px;border-radius:14px;background:var(--soft)}
+.tick{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:#fff;flex:none}
+.ch.on .tick{background:var(--grad);border-color:transparent}.tick .i{width:14px;height:14px;stroke-width:3}
+.toggle{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px;border-radius:16px;background:var(--soft)}
 .toggle div{flex:1}.toggle small{color:var(--mute)}
-.sw{width:46px;height:28px;border-radius:99px;background:var(--line);position:relative;border:0;flex:none}
-.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.15s}
-.sw.on{background:var(--green)}.sw.on::after{left:21px}
-.bar{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom,0px));padding:10px 14px;background:var(--card);border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;z-index:5}
-.bar .s{flex:1}.bar small{color:var(--mute);display:block;line-height:1.2}.bar b{font-size:19px;color:var(--amber)}
-.bar button{padding:13px 20px;border:0;border-radius:14px;background:var(--blue);color:#fff;font:inherit;font-weight:700;display:flex;gap:8px;align-items:center}
-.bar button:disabled{opacity:.45}
-nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:6}
-nav button{flex:1;background:none;border:0;padding:9px 2px 8px;color:var(--mute);font:inherit;font-size:11.5px;display:flex;flex-direction:column;align-items:center;gap:3px}
-nav button.on{font-weight:700}nav button.on .i{stroke-width:2.4}
-nav button:nth-child(1).on{color:var(--blue)}nav button:nth-child(2).on{color:var(--violet)}nav button:nth-child(3).on{color:var(--amber)}nav button:nth-child(4).on{color:var(--green)}
-.row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
-.row:first-child{border-top:0}.row .m{flex:1;min-width:0}.row small{color:var(--mute)}
+.sw{width:48px;height:29px;border-radius:99px;background:var(--line);position:relative;border:0;flex:none;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+.sw.on{background:var(--green)}.sw.on::after{left:22px}
+.bar{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));padding:10px 12px 10px 18px;border-radius:22px;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(14px);box-shadow:0 12px 34px -10px rgba(40,30,120,.45);display:flex;align-items:center;gap:12px;z-index:5}
+.bar .s{flex:1}.bar small{color:var(--mute);display:block;line-height:1.2}.bar b{font-size:20px;color:var(--amber)}
+.bar button{padding:13px 20px;border:0;border-radius:15px;background:var(--grad);color:#fff;font:inherit;font-weight:700;display:flex;gap:8px;align-items:center}.bar button:disabled{opacity:.45}
+nav{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:2px;padding:6px;border-radius:24px;background:color-mix(in srgb,var(--card) 90%,transparent);backdrop-filter:blur(16px);box-shadow:0 12px 34px -10px rgba(40,30,120,.5);z-index:6}
+nav button{flex:1;background:none;border:0;padding:8px 2px 6px;border-radius:18px;color:var(--mute);font:inherit;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;transition:.2s}
+nav button.on{background:color-mix(in srgb,var(--p) 14%,transparent);color:var(--p);font-weight:700}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.row:first-child{border-top:0}.row .m{flex:1;min-width:0}.row small{color:var(--mute)}
 .badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,currentColor 13%,transparent);white-space:nowrap}
 .badge .i{width:13px;height:13px;stroke-width:2.6}
-.prog{height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}.prog i{display:block;height:100%;background:var(--blue);border-radius:99px}
-.empty{text-align:center;color:var(--mute);padding:22px 10px}.empty .ic{margin:0 auto 10px;width:52px;height:52px;border-radius:16px}
+.prog{height:7px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}.prog i{display:block;height:100%;background:var(--grad);border-radius:99px}
+.empty{text-align:center;color:var(--mute);padding:24px 10px}.empty .ic{margin:0 auto 10px;width:56px;height:56px;border-radius:18px}
 .steps{margin:6px 0 0;padding:0;list-style:none}.steps li{display:flex;gap:12px;align-items:flex-start;padding:8px 0}
-.box{background:var(--soft);border-radius:14px;padding:14px;margin-top:10px;white-space:pre-line}
-.code{font-size:26px;font-weight:800;letter-spacing:1px;text-align:center;color:var(--blue)}
-.ok-big{width:64px;height:64px;border-radius:50%;background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);display:grid;place-items:center;margin:6px auto 12px}
-.ok-big .i{width:32px;height:32px;stroke-width:3}
-.toast{position:fixed;left:14px;right:14px;top:12px;padding:13px 14px;border-radius:14px;background:var(--navy);color:#fff;z-index:20;display:flex;gap:10px;align-items:center;transform:translateY(-90px);transition:.25s;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.toast.show{transform:none}.toast.err{background:#b91c1c}
-.skel{border-radius:18px;height:120px;margin-bottom:12px;background:linear-gradient(90deg,var(--card) 25%,var(--soft) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}
+.box{background:var(--soft);border-radius:16px;padding:14px;margin-top:10px;white-space:pre-line}
+.code{font-size:28px;font-weight:800;letter-spacing:1.5px;text-align:center;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ok-big{width:70px;height:70px;border-radius:50%;background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);display:grid;place-items:center;margin:6px auto 12px}.ok-big .i{width:34px;height:34px;stroke-width:3}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:14px;border-radius:18px;background:var(--soft)}.stat small{color:var(--mute);display:block}.stat b{font-size:21px}
+.toast{position:fixed;left:14px;right:14px;top:12px;padding:13px 16px;border-radius:16px;background:#1e1a3a;color:#fff;z-index:20;display:flex;gap:10px;align-items:center;transform:translateY(-90px);transition:.25s;box-shadow:0 10px 28px rgba(0,0,0,.3)}
+.toast.show{transform:none}.toast.err{background:#be123c}
+.skel{border-radius:24px;height:120px;margin-bottom:14px;background:linear-gradient(90deg,var(--card) 25%,var(--soft) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}
 @keyframes sh{to{background-position:-200% 0}}
-@media(prefers-reduced-motion:reduce){.skel{animation:none}.toast,.sw::after{transition:none}}
+@media(prefers-reduced-motion:reduce){.skel,.card{animation:none}.toast,.sw::after{transition:none}}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute"><defs>
-<symbol id="i-ads" viewBox="0 0 24 24"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
+<svg width="0" height="0" style="position:absolute"><defs><symbol id="i-ads" viewBox="0 0 24 24"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
 <symbol id="i-chan" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/></symbol>
 <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2-2h11v3"/><path d="M4 7v10a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H6a2 2 0 0 1-2-1z"/><circle cx="16" cy="13.5" r="1"/></symbol>
 <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
@@ -103,32 +107,57 @@ nav button:nth-child(1).on{color:var(--blue)}nav button:nth-child(2).on{color:va
 <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13l3-8h12l3 8v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M3 13h5l1 3h6l1-3h5"/></symbol>
 <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
 <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></symbol>
-</defs></svg>
-
-<div class="hero">
-  <div class="top"><span class="brand">Delal</span><small id="hello"></small></div>
-  <small>Balance</small>
-  <div class="amt" id="bal">0 ETB</div>
-  <div class="pills"><div class="pill2"><small>Live ads</small><b id="s1">0</b></div><div class="pill2"><small>My channels</small><b id="s2">0</b></div><div class="pill2"><small>Orders</small><b id="s3">0</b></div></div>
-  <div class="acts">
-    <button id="h1"><svg class="i"><use href="#i-out"/></svg>Withdraw</button>
-    <button id="h2"><svg class="i"><use href="#i-plus"/></svg>Add channel</button>
-  </div>
-</div>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></symbol>
+<symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+<symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M5 12v9h14v-9M12 8c-3 0-4-4-1-4 2 0 1 4 1 4zm0 0c3 0 4-4 1-4-2 0-1 4-1 4z"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-4L4 9M4 4v5h5M4 13a8 8 0 0 0 14 4l2-2M20 20v-5h-5"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol></defs></svg>
+<div class="hero" id="hero"><div class="top"><span class="brand">Delal <em>ደላል</em></span></div><div class="amt">&nbsp;</div></div>
 <main id="view"><div class="skel"></div><div class="skel"></div></main>
 <div id="barwrap"></div>
-<nav id="nav">
-  <button data-t="ads" class="on"><svg class="i"><use href="#i-ads"/></svg>Advertise</button>
-  <button data-t="chan"><svg class="i"><use href="#i-chan"/></svg>Publisher</button>
-  <button data-t="wallet"><svg class="i"><use href="#i-wallet"/></svg>Wallet</button>
-  <button data-t="orders"><svg class="i"><use href="#i-list"/></svg>Orders</button>
-</nav>
+<nav id="nav"></nav>
 <div class="toast" id="toast"></div>
 
 <script>
 const tg = (window.Telegram && window.Telegram.WebApp) || { initData: '', colorScheme: 'light', ready() {}, expand() {}, close() { history.back(); } };
 tg.ready(); tg.expand();
 document.documentElement.dataset.theme = tg.colorScheme === 'dark' || (!tg.initData && matchMedia('(prefers-color-scheme:dark)').matches) ? 'dark' : 'light';
+
+// ---------- Language (English / አማርኛ) ----------
+const AM = {
+  'Hello': 'ሰላም', 'Balance': 'ቀሪ ሒሳብ', 'Live ads': 'ቀጥታ ማስታወቂያ', 'My channels': 'ቻናሎቼ', 'Orders': 'ትዕዛዞች', 'Withdraw': 'ገንዘብ አውጣ', 'Add channel': 'ቻናል ጨምር',
+  'Advertise': 'ማስታወቂያ', 'Publisher': 'አሳታሚ', 'Wallet': 'ቦርሳ', 'Admin': 'አድሚን',
+  'Write your ad': 'ማስታወቂያዎን ይጻፉ', 'Text and an optional photo': 'ጽሑፍ እና አማራጭ ፎቶ', 'Photo link (optional)': 'የፎቶ ሊንክ (አማራጭ)', 'Preview': 'ቅድመ እይታ', 'Your preview appears here': 'ቅድመ እይታዎ እዚህ ይታያል',
+  'Button text (optional)': 'የቁልፍ ጽሑፍ (አማራጭ)', 'Button link': 'የቁልፍ ሊንክ', 'Clicks on this button are counted for you': 'የዚህ ቁልፍ ጠቅታዎች ይቆጠራሉ',
+  'Choose channels and groups': 'ቻናሎች እና ግሩፖች ይምረጡ', 'available': 'ይገኛሉ', 'Search channels': 'ቻናል ፈልግ', 'All': 'ሁሉም', 'Popular': 'ተወዳጅ', 'Price: low': 'ዋጋ: ዝቅተኛ', 'Price: high': 'ዋጋ: ከፍተኛ',
+  'members': 'አባላት', 'per hour': 'በሰዓት', 'No match for your search': 'ፍለጋዎ ምንም አላገኘም', 'No approved channels yet': 'የጸደቀ ቻናል የለም',
+  'Duration': 'የሚቆይበት ጊዜ', 'How long the ad stays posted': 'ማስታወቂያው ለምን ያህል ጊዜ ይቆያል', 'Or enter hours (1-168)': 'ወይም ሰዓት ያስገቡ (1-168)', 'Pin the post': 'ማስታወቂያውን Pin አድርግ', 'per channel': 'በአንድ ቻናል',
+  'Schedule start': 'መጀመሪያ ሰዓት ይመድቡ', 'Post later instead of right after approval': 'ከጸደቀ በኋላ ወዲያው ሳይሆን በኋላ ይለጠፍ', 'Coupon code (optional)': 'የቅናሽ ኮድ (አማራጭ)',
+  'selected': 'ተመርጧል', 'hours': 'ሰዓት', 'Create order': 'ትዕዛዝ ፍጠር',
+  'Order created': 'ትዕዛዝ ተፈጥሯል', 'Total to pay': 'የሚከፈል ጠቅላላ', 'Order code': 'የትዕዛዝ ኮድ', 'Copy code': 'ኮዱን ቅዳ', 'Code copied': 'ኮዱ ተቀድቷል', 'Discount applied': 'ቅናሽ ተደርጓል',
+  'Pay online (Chapa)': 'በኦንላይን ክፈል (Chapa)', 'How to pay': 'እንዴት መክፈል', 'Or pay manually': 'ወይም በእጅ ይክፈሉ',
+  'Pay to the account above and write the code': 'ከላይ ወዳለው አካውንት ይክፈሉ እና ኮዱን ይጻፉ', 'in the payment note.': 'በክፍያ ማስታወሻ ላይ።', 'Send the payment screenshot to the bot chat.': 'የክፍያ ስክሪንሾቱን ወደ ቦቱ ይላኩ።', 'After an administrator approves it, your ad is posted automatically.': 'አድሚን ካጸደቀ በኋላ ማስታወቂያዎ በራሱ ይለጠፋል።', 'Go to the bot': 'ወደ ቦቱ ሂድ',
+  'Earn from your channel or group': 'ከቻናልዎ ወይም ግሩፕዎ ገቢ ያግኙ', 'You receive': 'ይደርስዎታል', 'of every ad price': 'ከእያንዳንዱ የማስታወቂያ ዋጋ',
+  'Add this bot as an administrator (Post Messages for channels, Send Messages and Photos for groups).': 'ይህን ቦት አድሚን ያድርጉ (ለቻናል Post Messages፣ ለግሩፕ Send Messages እና Photos)።', 'Enter the public username below, or run the /connect command with your code inside the chat.': 'ከታች የህዝብ ስም (username) ያስገቡ፣ ወይም በቻቱ ውስጥ /connect ትዕዛዝ ከኮድዎ ጋር ይላኩ።', 'An administrator approves it and you can receive ads.': 'አድሚን ያጸድቃል፣ ከዚያ ማስታወቂያ መቀበል ይችላሉ።',
+  'Your verification code': 'የማረጋገጫ ኮድዎ', 'For private groups and channels': 'ለግል ግሩፖች እና ቻናሎች', 'Copy /connect command': '/connect ትዕዛዝ ቅዳ', 'Copied. Paste it inside your group or channel.': 'ተቀድቷል። በግሩፕዎ ወይም ቻናልዎ ውስጥ ይለጥፉት።',
+  'Add by username': 'በ username ጨምር', 'Channel or group username': 'የቻናል ወይም ግሩፕ username', 'Category': 'ምድብ', 'Your price per hour (optional)': 'በሰዓት የእርስዎ ዋጋ (አማራጭ)', 'Leave empty to price by member count': 'በአባላት ብዛት ለማስላት ባዶ ይተዉ', 'Submit for approval': 'ለማጽደቅ አስገባ', 'Submitted. You will be notified after approval.': 'ገብቷል። ከጸደቀ በኋላ ይነገርዎታል።',
+  'My channels and groups': 'ቻናሎቼ እና ግሩፖቼ', 'You have not added a channel yet': 'ገና ቻናል አልጨመሩም',
+  'News': 'ዜና', 'Sports': 'ስፖርት', 'Business': 'ንግድ', 'Tech': 'ቴክኖሎጂ', 'Music': 'ሙዚቃ', 'Education': 'ትምህርት', 'Other': 'ሌላ',
+  'Minimum': 'ዝቅተኛው', 'Amount (ETB)': 'መጠን (ETB)', 'Max': 'ከፍተኛ', 'Method': 'መንገድ', 'Account or phone number': 'አካውንት ወይም ስልክ ቁጥር', 'Request withdrawal': 'ማውጫ ጠይቅ', 'Request sent': 'ጥያቄው ተልኳል', 'Withdrawal history': 'የማውጫ ታሪክ', 'No withdrawals yet': 'ገና ማውጫ የለም',
+  'Invite friends': 'ጓደኞችን ይጋብዙ', 'Earn': 'ያግኙ', 'when someone you invited pays for an ad': 'የጋበዙት ሰው ለማስታወቂያ ሲከፍል', 'Invited': 'የተጋበዙ', 'Earned': 'የተገኘ', 'Copy invite link': 'የመጋበዣ ሊንክ ቅዳ', 'Link copied': 'ሊንኩ ተቀድቷል',
+  'No orders yet': 'ገና ትዕዛዝ የለም', 'Create an ad': 'ማስታወቂያ ፍጠር', 'left': 'ቀርቶታል', 'Starts': 'ይጀምራል', 'clicks': 'ጠቅታ', 'Refresh': 'አድስ', 'Pay online': 'በኦንላይን ክፈል', 'Cancel order': 'ትዕዛዝ ሰርዝ', 'Repeat': 'ድገም', 'Cancel this order?': 'ይህ ትዕዛዝ ይሰረዝ?', 'Order cancelled': 'ትዕዛዙ ተሰርዟል',
+  'Pay, then send the payment screenshot to the bot chat. Include code': 'ይክፈሉ፣ ከዚያ የክፍያ ስክሪንሾቱን ወደ ቦቱ ይላኩ። ኮዱን', 'in the payment note.': 'በክፍያ ማስታወሻ ያካትቱ።', 'Unpaid orders expire after 24 hours.': 'ያልተከፈሉ ትዕዛዞች ከ24 ሰዓት በኋላ ይሰረዛሉ።', 'After paying, come back and tap Refresh': 'ከከፈሉ በኋላ ተመልሰው "አድስ" ይጫኑ',
+  'Awaiting payment': 'ክፍያ በመጠበቅ ላይ', 'In review': 'በግምገማ ላይ', 'Active': 'ንቁ', 'Completed': 'ተጠናቋል', 'Rejected': 'ውድቅ ተደርጓል', 'Approved': 'ጸድቋል', 'Live': 'ቀጥታ', 'Queued': 'ተራ ይጠብቃል', 'Failed': 'አልተሳካም', 'Removed': 'ተሰርዟል', 'Finishing': 'በመጠናቀቅ ላይ', 'Paid': 'ተከፍሏል', 'Posting': 'በመለጠፍ ላይ', 'Expired': 'ጊዜው አልፏል', 'Cancelled': 'ተሰርዟል', 'Pending': 'በመጠበቅ ላይ',
+  'Dashboard': 'ዳሽቦርድ', 'Users': 'ተጠቃሚዎች', 'Channels': 'ቻናሎች', 'Paid orders': 'የተከፈሉ ትዕዛዞች', 'Revenue': 'ገቢ', 'Waiting for approval (use the bot buttons)': 'ለማጽደቅ የሚጠብቁ (የቦቱን ቁልፎች ይጠቀሙ)', 'Orders': 'ትዕዛዞች', 'Withdrawals': 'ማውጫዎች',
+  'Block or unblock a user': 'ተጠቃሚ አግድ ወይም ፍታ', 'User ID': 'የተጠቃሚ ID', 'Block': 'አግድ', 'Unblock': 'ፍታ', 'Done': 'ተጠናቋል', 'Coupons': 'የቅናሽ ኮዶች', 'Code': 'ኮድ', 'Percent': 'መቶኛ', 'Uses': 'ብዛት', 'Save coupon': 'ኮዱን አስቀምጥ', 'uses left': 'ቀሪ አጠቃቀም',
+  'Open this app inside Telegram.': 'ይህን መተግበሪያ በ Telegram ውስጥ ይክፈቱ።', 'Connection failed. Please try again.': 'ግንኙነት አልተሳካም። እንደገና ይሞክሩ።'
+};
+let lang = localStorage.getItem('lang') || (((navigator.language || '') + (tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.language_code || '' : '')).toLowerCase().includes('am') ? 'am' : 'en');
+const t = s => (lang === 'am' && AM[s]) || s;
+
 const $ = s => document.querySelector(s), view = $('#view'), barwrap = $('#barwrap');
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const birr = n => (Math.round(n * 100) / 100) + ' ETB';
@@ -136,154 +165,198 @@ const ico = (n, c = '') => `<svg class="i ${c}"><use href="#i-${n}"/></svg>`;
 const tile = (n, c) => `<span class="ic ${c}">${ico(n)}</span>`;
 const kfmt = n => n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1) + 'K' : n;
 const hap = () => tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light');
-const COLORS = ['#2563eb', '#7c3aed', '#0d9488', '#db2777', '#ea580c', '#16a34a'];
-const av = t => `<span class="av" style="background:${COLORS[[...t].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length]}">${esc([...t][0] || '?').toUpperCase()}</span>`;
+const COLORS = ['#6d5dfc', '#a855f7', '#0d9488', '#db2777', '#ea580c', '#2563eb'];
+const av = x => `<span class="av" style="background:${COLORS[[...x].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length]}">${esc([...x][0] || '?').toUpperCase()}</span>`;
 const handle = c => c.username ? '@' + c.username : 'Private chat';
+const cap = c => t(({ news: 'News', sports: 'Sports', business: 'Business', tech: 'Tech', music: 'Music', education: 'Education', other: 'Other' })[c] || 'Other');
 const mode = new URLSearchParams(location.search).get('mode');
-let S = { me: null, channels: [], mine: { channels: [], orders: [] }, tab: mode === 'publisher' ? 'chan' : 'ads', q: '', picked: new Set(), d: { html: '', photo: '', hours: 6, pin: false }, done: null, method: 'Telebirr' };
+const blank = () => ({ html: '', photo: '', hours: 6, pin: false, btnT: '', btnU: '', sched: false, when: '', coupon: '' });
+let S = { me: null, channels: [], mine: { channels: [], orders: [] }, tab: mode === 'publisher' ? 'chan' : 'ads', q: '', cat: 'all', sort: 'pop', picked: new Set(), d: blank(), done: null, method: 'Telebirr', regCat: 'other' };
 
-let tt; function toast(t, err) {
+let tt; function toast(x, err) {
   const el = $('#toast'); el.className = 'toast show' + (err ? ' err' : '');
-  el.innerHTML = ico(err ? 'warn' : 'check') + '<span>' + esc(t) + '</span>';
+  el.innerHTML = ico(err ? 'warn' : 'check') + '<span>' + esc(x) + '</span>';
   clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 3400);
   tg.HapticFeedback && tg.HapticFeedback.notificationOccurred(err ? 'error' : 'success');
 }
 async function api(p, body) {
   try {
     const r = await fetch('/api' + p, { method: body ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json', 'x-init-data': tg.initData }, body: body ? JSON.stringify(body) : undefined });
-    if (r.status === 401) return { error: 'Open this app inside Telegram.' };
+    if (r.status === 401) return { error: t('Open this app inside Telegram.') };
     return await r.json();
-  } catch (e) { return { error: 'Connection failed. Please try again.' }; }
+  } catch (e) { return { error: t('Connection failed. Please try again.') }; }
+}
+function hero() {
+  const m = S.me; if (!m) return;
+  const live = S.mine.orders.reduce((n, o) => n + o.items.filter(i => i.status === 'live').length, 0);
+  $('#hero').innerHTML = `<div class="top"><span class="brand">Delal <em>ደላል</em></span><span class="lg" id="lg">${lang === 'am' ? 'English' : 'አማርኛ'}</span></div>
+    <small>${t('Hello')}, ${esc(m.me.name)}</small><br><small>${t('Balance')}</small>
+    <div class="amt">${birr(m.me.balance)}</div>
+    <div class="pills"><div class="pill2"><small>${t('Live ads')}</small><b>${live}</b></div><div class="pill2"><small>${t('My channels')}</small><b>${S.mine.channels.length}</b></div><div class="pill2"><small>${t('Orders')}</small><b>${S.mine.orders.length}</b></div></div>
+    <div class="acts"><button id="h1">${ico('out')}${t('Withdraw')}</button><button class="g" id="h2">${ico('plus')}${t('Add channel')}</button></div>`;
+  $('#h1').onclick = () => go('wallet'); $('#h2').onclick = () => go('chan');
+  $('#lg').onclick = async () => { lang = lang === 'am' ? 'en' : 'am'; localStorage.setItem('lang', lang); hap(); api('/lang', { lang }); hero(); nav(); render(); };
+}
+function nav() {
+  const tabs = [['ads', 'ads', 'Advertise'], ['chan', 'chan', 'Publisher'], ['wallet', 'wallet', 'Wallet'], ['orders', 'list', 'Orders']];
+  if (S.me && S.me.isAdmin) tabs.push(['admin', 'shield', 'Admin']);
+  $('#nav').innerHTML = tabs.map(([k, i, n]) => `<button data-t="${k}" class="${S.tab === k ? 'on' : ''}">${ico(i)}${t(n)}</button>`).join('');
 }
 async function load() {
   const [me, ch, mine] = await Promise.all([api('/me'), api('/channels'), api('/mine')]);
   if (me.error || ch.error || mine.error) { view.innerHTML = `<div class="card empty">${tile('warn', 'coral')}${esc(me.error || ch.error || mine.error)}</div>`; return; }
   S.me = me; S.channels = ch; S.mine = mine;
   S.picked = new Set([...S.picked].filter(id => ch.some(c => c.id === id)));
-  $('#hello').textContent = 'Hi, ' + me.me.name; $('#bal').textContent = birr(me.me.balance);
-  $('#s1').textContent = mine.orders.reduce((n, o) => n + o.items.filter(i => i.status === 'live').length, 0);
-  $('#s2').textContent = mine.channels.length; $('#s3').textContent = mine.orders.length;
-  render();
+  if (!localStorage.getItem('lang') && me.me.lang) lang = me.me.lang;
+  hero(); nav(); render();
 }
-const ST = { awaiting_pay: ['Awaiting payment', 'amber', 'clock'], pending: ['In review', 'amber', 'clock'], active: ['Active', 'blue', 'play'], done: ['Completed', 'green', 'check'], rejected: ['Rejected', 'coral', 'x'], approved: ['Approved', 'green', 'check'], live: ['Live', 'blue', 'play'], queued: ['Queued', 'amber', 'clock'], failed: ['Failed', 'coral', 'x'], removed: ['Removed', 'coral', 'x'], closing: ['Finishing', 'blue', 'clock'], paid: ['Paid', 'green', 'check'] };
-const badge = s => { const [t, c, i] = ST[s] || [s, 'amber', 'clock']; return `<span class="badge ${c}">${ico(i)}${t}</span>`; };
+const ST = { awaiting_pay: ['Awaiting payment', 'amber', 'clock'], pending: ['In review', 'amber', 'clock'], active: ['Active', 'blue', 'play'], done: ['Completed', 'green', 'check'], rejected: ['Rejected', 'coral', 'x'], approved: ['Approved', 'green', 'check'], live: ['Live', 'blue', 'play'], queued: ['Queued', 'amber', 'clock'], posting: ['Posting', 'blue', 'clock'], failed: ['Failed', 'coral', 'x'], removed: ['Removed', 'coral', 'x'], closing: ['Finishing', 'blue', 'clock'], paid: ['Paid', 'green', 'check'], expired: ['Expired', 'coral', 'x'], cancelled: ['Cancelled', 'coral', 'x'] };
+const badge = s => { const [x, c, i] = ST[s] || [s, 'amber', 'clock']; return `<span class="badge ${c}">${ico(i)}${t(x)}</span>`; };
 const left = ms => { const m = Math.max(0, Math.round((ms - Date.now()) / 60000)); return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm'; };
-const empty = (i, c, t) => `<div class="empty">${tile(i, c)}${t}</div>`;
-// keep only tags Telegram supports in the preview
-const clean = h => String(h).replace(/<[^>]*>/g, t => /^<\/?(b|i|u|s|em|strong|code|pre)>$/i.test(t) || /^<a href="https?:[^"<>]*">$/i.test(t) || /^<\/a>$/i.test(t) ? t : t.replace(/</g, '&lt;').replace(/>/g, '&gt;')).replace(/\n/g, '<br>');
+const empty = (i, c, x) => `<div class="empty">${tile(i, c)}${x}</div>`;
+const clean = h => String(h).replace(/<[^>]*>/g, x => /^<\/?(b|i|u|s|em|strong|code|pre)>$/i.test(x) || /^<a href="https?:[^"<>]*">$/i.test(x) || /^<\/a>$/i.test(x) ? x : x.replace(/</g, '&lt;').replace(/>/g, '&gt;')).replace(/\n/g, '<br>');
+const copy = (x, msg) => { navigator.clipboard && navigator.clipboard.writeText(x); toast(t(msg)); };
 
 function render() {
-  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.t === S.tab));
-  barwrap.innerHTML = ''; window.scrollTo(0, 0);
-  ({ ads: vAds, chan: vChan, wallet: vWallet, orders: vOrders })[S.tab]();
+  nav(); barwrap.innerHTML = ''; window.scrollTo(0, 0);
+  ({ ads: vAds, chan: vChan, wallet: vWallet, orders: vOrders, admin: vAdmin })[S.tab]();
 }
-const go = t => { S.tab = t; S.done = null; hap(); render(); };
+const go = k => { S.tab = k; S.done = null; hap(); render(); };
 $('#nav').onclick = e => { const b = e.target.closest('button'); if (b) go(b.dataset.t); };
-$('#h1').onclick = () => go('wallet'); $('#h2').onclick = () => go('chan');
 
 // ---------- Advertise ----------
-const total = () => S.channels.filter(c => S.picked.has(c.id)).reduce((t, c) => t + c.price * S.d.hours + (S.d.pin ? S.me.pinPrice : 0), 0);
+const total = () => S.channels.filter(c => S.picked.has(c.id)).reduce((s, c) => s + c.price * S.d.hours + (S.d.pin ? S.me.pinPrice : 0), 0);
 const chList = () => {
-  const f = S.q.trim().toLowerCase(), list = S.channels.filter(c => !f || (c.title + ' ' + c.username).toLowerCase().includes(f));
+  const f = S.q.trim().toLowerCase();
+  const list = S.channels.filter(c => (S.cat === 'all' || c.category === S.cat) && (!f || (c.title + ' ' + c.username).toLowerCase().includes(f)))
+    .sort((a, b) => S.sort === 'lo' ? a.price - b.price : S.sort === 'hi' ? b.price - a.price : b.subs - a.subs);
   return list.length ? list.map(c => `<div class="ch ${S.picked.has(c.id) ? 'on' : ''}" data-id="${c.id}">${av(c.title)}
-      <div class="m"><b>${esc(c.title)}</b><small>${esc(handle(c))} · ${kfmt(c.subs)} members</small></div>
-      <div class="pr"><b>${birr(c.price)}</b><small>per hour</small></div><span class="tick">${ico('check')}</span></div>`).join('')
-    : empty('chan', 'violet', S.channels.length ? 'No match for your search' : 'No approved channels yet');
+      <div class="m"><b>${esc(c.title)}</b><small>${esc(handle(c))} · ${kfmt(c.subs)} ${t('members')} · ${cap(c.category)}</small></div>
+      <div class="pr"><b>${birr(c.price)}</b><small>${t('per hour')}</small></div><span class="tick">${ico('check')}</span></div>`).join('')
+    : empty('chan', 'violet', S.channels.length ? t('No match for your search') : t('No approved channels yet'));
 };
+const catChips = () => ['all', ...(S.me.cats || [])].map(c => `<button class="chip ${S.cat === c ? 'on' : ''}" data-c="${c}">${c === 'all' ? t('All') : cap(c)}</button>`).join('');
 function vAds() {
   if (S.done) return vDone();
   const d = S.d;
   view.innerHTML = `
-  <div class="card"><div class="sh"><span class="num">1</span><div><h2>Write your ad</h2><p>Text and an optional photo</p></div></div>
+  <div class="card"><div class="sh"><span class="num">1</span><div><h2>${t('Write your ad')}</h2><p>${t('Text and an optional photo')}</p></div></div>
     <textarea id="html" placeholder="<b>New shop open!</b>&#10;Up to 30% off. <a href=&quot;https://t.me/...&quot;>Tap here</a>">${esc(d.html)}</textarea>
-    <label class="l">Photo link (optional)</label><input id="photo" inputmode="url" placeholder="https://.../image.jpg" value="${esc(d.photo)}">
-    <label class="l">Preview</label><div class="bubble" id="prev"></div></div>
-  <div class="card"><div class="sh"><span class="num">2</span><div><h2>Choose channels and groups</h2><p>${S.channels.length} available</p></div></div>
-    <div class="search">${ico('search')}<input id="q" placeholder="Search channels" value="${esc(S.q)}"></div><div id="list">${chList()}</div></div>
-  <div class="card"><div class="sh"><span class="num">3</span><div><h2>Duration</h2><p>How long the ad stays posted</p></div></div>
+    <label class="l">${t('Photo link (optional)')}</label><input id="photo" inputmode="url" placeholder="https://.../image.jpg" value="${esc(d.photo)}">
+    <label class="l">${t('Button text (optional)')}</label><input id="btnT" maxlength="30" placeholder="Open shop" value="${esc(d.btnT)}">
+    <label class="l">${t('Button link')}</label><input id="btnU" inputmode="url" placeholder="https://t.me/..." value="${esc(d.btnU)}">
+    <small style="color:var(--mute)">${t('Clicks on this button are counted for you')}</small>
+    <label class="l">${t('Preview')}</label><div class="bubble" id="prev"></div></div>
+  <div class="card"><div class="sh"><span class="num">2</span><div><h2>${t('Choose channels and groups')}</h2><p>${S.channels.length} ${t('available')}</p></div></div>
+    <div class="search">${ico('search')}<input id="q" placeholder="${t('Search channels')}" value="${esc(S.q)}"></div>
+    <div class="hs" id="cats">${catChips()}</div>
+    <div class="hs" id="sorts">${[['pop', 'Popular'], ['lo', 'Price: low'], ['hi', 'Price: high']].map(([k, n]) => `<button class="chip ${S.sort === k ? 'on' : ''}" data-s="${k}">${t(n)}</button>`).join('')}</div>
+    <div id="list">${chList()}</div></div>
+  <div class="card"><div class="sh"><span class="num">3</span><div><h2>${t('Duration')}</h2><p>${t('How long the ad stays posted')}</p></div></div>
     <div class="chips" id="chips">${[1, 6, 12, 24, 48, 72].map(h => `<button class="chip ${d.hours === h ? 'on' : ''}" data-h="${h}">${h}h</button>`).join('')}</div>
-    <label class="l">Or enter hours (1-168)</label><input id="hours" type="number" min="1" max="168" inputmode="numeric" value="${d.hours}">
-    <div class="toggle">${tile('pin', 'amber')}<div><b>Pin the post</b><br><small>+${birr(S.me.pinPrice)} per channel</small></div><button class="sw ${d.pin ? 'on' : ''}" id="pin" aria-label="Pin the post"></button></div></div>`;
-  barwrap.innerHTML = `<div class="bar"><div class="s"><small id="cnt"></small><b id="tot"></b></div><button id="go">${ico('send')}Create order</button></div>`;
+    <label class="l">${t('Or enter hours (1-168)')}</label><input id="hours" type="number" min="1" max="168" inputmode="numeric" value="${d.hours}">
+    <div class="toggle">${tile('pin', 'amber')}<div><b>${t('Pin the post')}</b><br><small>+${birr(S.me.pinPrice)} ${t('per channel')}</small></div><button class="sw ${d.pin ? 'on' : ''}" id="pin" aria-label="Pin"></button></div>
+    <div class="toggle">${tile('cal', 'blue')}<div><b>${t('Schedule start')}</b><br><small>${t('Post later instead of right after approval')}</small></div><button class="sw ${d.sched ? 'on' : ''}" id="sched" aria-label="Schedule"></button></div>
+    <input id="when" type="datetime-local" style="margin-top:10px;display:${d.sched ? 'block' : 'none'}" value="${esc(d.when)}">
+    <label class="l">${t('Coupon code (optional)')}</label><input id="coupon" autocapitalize="characters" value="${esc(d.coupon)}"></div>`;
+  barwrap.innerHTML = `<div class="bar"><div class="s"><small id="cnt"></small><b id="tot"></b></div><button id="go">${ico('send')}${t('Create order')}</button></div>`;
   const upd = () => {
-    d.html = $('#html').value; d.photo = $('#photo').value.trim();
-    $('#prev').innerHTML = (d.photo ? `<img src="${esc(d.photo)}" onerror="this.remove()">` : '') + `<div class="t">${d.html ? clean(d.html) : '<span class="hint">Your preview appears here</span>'}</div>`;
-    $('#tot').textContent = birr(total()); $('#cnt').textContent = S.picked.size + ' selected · ' + d.hours + ' hour(s)';
-    $('#go').disabled = !d.html.trim() || !S.picked.size;
+    d.html = $('#html').value; d.photo = $('#photo').value.trim(); d.btnT = $('#btnT').value; d.btnU = $('#btnU').value.trim(); d.when = $('#when').value; d.coupon = $('#coupon').value;
+    $('#prev').innerHTML = (d.photo ? `<img src="${esc(d.photo)}" onerror="this.remove()">` : '') + `<div class="t">${d.html ? clean(d.html) : '<span class="hint">' + t('Your preview appears here') + '</span>'}</div>` + (d.btnT && d.btnU ? `<div class="bt">${esc(d.btnT)}</div>` : '');
+    $('#tot').textContent = birr(total()); $('#cnt').textContent = S.picked.size + ' ' + t('selected') + ' · ' + d.hours + ' ' + t('hours');
+    $('#go').disabled = !d.html.trim() || !S.picked.size || (d.sched && !d.when);
   };
   const bind = () => view.querySelectorAll('.ch').forEach(el => el.onclick = () => { const id = +el.dataset.id; S.picked.has(id) ? S.picked.delete(id) : S.picked.add(id); el.classList.toggle('on'); hap(); upd(); });
-  $('#html').oninput = $('#photo').oninput = upd;
+  ['#html', '#photo', '#btnT', '#btnU', '#when', '#coupon'].forEach(s => $(s).oninput = upd);
   $('#q').oninput = e => { S.q = e.target.value; $('#list').innerHTML = chList(); bind(); };
-  $('#hours').oninput = e => { d.hours = Math.min(168, Math.max(1, +e.target.value || 1)); document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', +c.dataset.h === d.hours)); upd(); };
-  $('#chips').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; d.hours = +b.dataset.h; $('#hours').value = d.hours; document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === b)); hap(); upd(); };
-  $('#pin').onclick = e => { d.pin = !d.pin; e.target.classList.toggle('on', d.pin); hap(); upd(); };
+  $('#cats').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; S.cat = b.dataset.c; $('#cats').innerHTML = catChips(); $('#list').innerHTML = chList(); bind(); hap(); };
+  $('#sorts').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; S.sort = b.dataset.s; document.querySelectorAll('#sorts .chip').forEach(c => c.classList.toggle('on', c === b)); $('#list').innerHTML = chList(); bind(); hap(); };
+  $('#hours').oninput = e => { d.hours = Math.min(168, Math.max(1, +e.target.value || 1)); document.querySelectorAll('#chips .chip').forEach(c => c.classList.toggle('on', +c.dataset.h === d.hours)); upd(); };
+  $('#chips').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; d.hours = +b.dataset.h; $('#hours').value = d.hours; document.querySelectorAll('#chips .chip').forEach(c => c.classList.toggle('on', c === b)); hap(); upd(); };
+  $('#pin').onclick = e => { d.pin = !d.pin; e.currentTarget.classList.toggle('on', d.pin); hap(); upd(); };
+  $('#sched').onclick = e => { d.sched = !d.sched; e.currentTarget.classList.toggle('on', d.sched); $('#when').style.display = d.sched ? 'block' : 'none'; hap(); upd(); };
   bind();
   $('#go').onclick = async () => {
     $('#go').disabled = true;
-    const r = await api('/order', { html: d.html, photo: d.photo, hours: d.hours, pin: d.pin, channels: [...S.picked] });
+    const r = await api('/order', { html: d.html, photo: d.photo, hours: d.hours, pin: d.pin, channels: [...S.picked], btn_text: d.btnT, btn_url: d.btnU, start_at: d.sched && d.when ? Date.parse(d.when) : 0, coupon: d.coupon });
     if (r.error) { toast(r.error, true); upd(); return; }
-    S.done = r; S.d = { html: '', photo: '', hours: 6, pin: false }; S.picked.clear(); await load();
+    S.done = r; S.d = blank(); S.picked.clear(); await load();
   };
   upd();
+}
+async function payOnline(id) {
+  const r = await api('/order/pay', { id });
+  if (r.error) return toast(r.error, true);
+  tg.openLink ? tg.openLink(r.url) : window.open(r.url, '_blank'); toast(t('After paying, come back and tap Refresh'));
 }
 function vDone() {
   const d = S.done;
   view.innerHTML = `<div class="card"><div class="ok-big">${ico('check')}</div>
-    <div style="text-align:center"><b style="font-size:18px">Order created</b><br><small style="color:var(--mute)">Total to pay</small><div style="font-size:28px;font-weight:800;color:var(--amber)">${birr(d.total)}</div></div>
-    <div class="box"><div style="text-align:center;color:var(--mute);font-size:13px">Order code</div><div class="code">${d.code}</div></div>
-    <button class="btn soft" id="cp">${ico('copy')}Copy code</button></div>
-  <div class="card"><div class="sh"><div><h2>How to pay</h2></div></div><div class="box" style="margin-top:0">${esc(S.me.payInfo)}</div>
+    <div style="text-align:center"><b style="font-size:19px">${t('Order created')}</b><br><small style="color:var(--mute)">${t('Total to pay')}</small><div style="font-size:30px;font-weight:800;color:var(--amber)">${birr(d.total)}</div>${d.discount ? `<small class="green">${t('Discount applied')}: -${birr(d.discount)}</small>` : ''}</div>
+    <div class="box"><div style="text-align:center;color:var(--mute);font-size:13px">${t('Order code')}</div><div class="code">${d.code}</div></div>
+    <button class="btn soft" id="cp">${ico('copy')}${t('Copy code')}</button>
+    ${d.chapa ? `<button class="btn green" id="pay">${ico('card')}${t('Pay online (Chapa)')}</button>` : ''}</div>
+  <div class="card"><div class="sh"><div><h2>${d.chapa ? t('Or pay manually') : t('How to pay')}</h2></div></div><div class="box" style="margin-top:0">${esc(S.me.payInfo)}</div>
     <ul class="steps">
-      <li><span class="num">1</span><div>Pay to the account above and write the code <b>${d.code}</b> in the payment note.</div></li>
-      <li><span class="num">2</span><div>Send the payment screenshot to the bot chat.</div></li>
-      <li><span class="num">3</span><div>After an administrator approves it, your ad is posted automatically.</div></li></ul>
-    <button class="btn" id="bot">${ico('send')}Go to the bot</button></div>`;
-  $('#cp').onclick = () => { navigator.clipboard && navigator.clipboard.writeText(d.code); toast('Code copied'); };
+      <li><span class="num">1</span><div>${t('Pay to the account above and write the code')} <b>${d.code}</b> ${t('in the payment note.')}</div></li>
+      <li><span class="num">2</span><div>${t('Send the payment screenshot to the bot chat.')}</div></li>
+      <li><span class="num">3</span><div>${t('After an administrator approves it, your ad is posted automatically.')}</div></li></ul>
+    <small style="color:var(--mute)">${t('Unpaid orders expire after 24 hours.')}</small>
+    <button class="btn" id="bot">${ico('send')}${t('Go to the bot')}</button></div>`;
+  $('#cp').onclick = () => copy(d.code, 'Code copied');
+  if ($('#pay')) $('#pay').onclick = () => payOnline(d.id);
   $('#bot').onclick = () => tg.close();
 }
 
 // ---------- Publisher ----------
 function vChan() {
   const code = S.me.me.code || '';
+  const P = i => `<span class="num" style="background:var(--violet)">${i}</span>`;
   view.innerHTML = `
-  <div class="card"><div class="sh">${tile('chan', 'violet')}<div><h2>Earn from your channel or group</h2><p>You receive ${S.me.ownerShare}% of every ad price</p></div></div>
-    <ul class="steps"><li><span class="num" style="background:var(--violet)">1</span><div>Add this bot as an administrator (Post Messages for channels, Send Messages and Photos for groups).</div></li>
-    <li><span class="num" style="background:var(--violet)">2</span><div>Enter the public username below, or run the /connect command with your code inside the chat.</div></li>
-    <li><span class="num" style="background:var(--violet)">3</span><div>An administrator approves it and you can receive ads.</div></li></ul></div>
-  <div class="card"><div class="sh">${tile('key', 'amber')}<div><h2>Your verification code</h2><p>For private groups and channels</p></div></div>
-    <div class="box" style="margin-top:0"><div class="code" style="color:var(--amber)">${esc(code)}</div></div>
-    <button class="btn soft" id="cc">${ico('copy')}Copy /connect command</button></div>
-  <div class="card"><div class="sh"><h2>Add by username</h2></div>
-    <label class="l" style="margin-top:0">Channel or group username</label><input id="un" placeholder="@mychannel" autocapitalize="off">
-    <label class="l">Your price per hour (optional)</label><input id="pr" type="number" inputmode="numeric" placeholder="Leave empty to price by member count">
-    <button class="btn" id="reg" style="background:var(--violet)">${ico('plus')}Submit for approval</button></div>
-  <div class="card"><div class="sh"><h2>My channels and groups</h2></div>${S.mine.channels.length ? S.mine.channels.map(c => `<div class="row">${av(c.title)}<div class="m"><b>${esc(c.title)}</b><br><small>${esc(handle(c))} · ${kfmt(c.subs)} · ${birr(c.price)}/h</small></div>${badge(c.status)}</div>`).join('') : empty('inbox', 'violet', 'You have not added a channel yet')}</div>`;
-  $('#cc').onclick = () => { navigator.clipboard && navigator.clipboard.writeText('/connect ' + code); toast('Copied. Paste it inside your group or channel.'); };
+  <div class="card"><div class="sh">${tile('chan', 'violet')}<div><h2>${t('Earn from your channel or group')}</h2><p>${t('You receive')} ${S.me.ownerShare}% ${t('of every ad price')}</p></div></div>
+    <ul class="steps"><li>${P(1)}<div>${t('Add this bot as an administrator (Post Messages for channels, Send Messages and Photos for groups).')}</div></li>
+    <li>${P(2)}<div>${t('Enter the public username below, or run the /connect command with your code inside the chat.')}</div></li>
+    <li>${P(3)}<div>${t('An administrator approves it and you can receive ads.')}</div></li></ul></div>
+  <div class="card"><div class="sh">${tile('key', 'amber')}<div><h2>${t('Your verification code')}</h2><p>${t('For private groups and channels')}</p></div></div>
+    <div class="box" style="margin-top:0"><div class="code">${esc(code)}</div></div>
+    <button class="btn soft" id="cc">${ico('copy')}${t('Copy /connect command')}</button></div>
+  <div class="card"><div class="sh"><h2>${t('Add by username')}</h2></div>
+    <label class="l" style="margin-top:0">${t('Channel or group username')}</label><input id="un" placeholder="@mychannel" autocapitalize="off">
+    <label class="l">${t('Category')}</label><div class="hs" id="rc">${S.me.cats.map(c => `<button class="chip ${S.regCat === c ? 'on' : ''}" data-c="${c}">${cap(c)}</button>`).join('')}</div>
+    <label class="l">${t('Your price per hour (optional)')}</label><input id="pr" type="number" inputmode="numeric" placeholder="${t('Leave empty to price by member count')}">
+    <button class="btn" id="reg">${ico('plus')}${t('Submit for approval')}</button></div>
+  <div class="card"><div class="sh"><h2>${t('My channels and groups')}</h2></div>${S.mine.channels.length ? S.mine.channels.map(c => `<div class="row">${av(c.title)}<div class="m"><b>${esc(c.title)}</b><br><small>${esc(handle(c))} · ${kfmt(c.subs)} · ${cap(c.category)} · ${birr(c.price)}/h</small></div>${badge(c.status)}</div>`).join('') : empty('inbox', 'violet', t('You have not added a channel yet'))}</div>`;
+  $('#cc').onclick = () => copy('/connect ' + code, 'Copied. Paste it inside your group or channel.');
+  $('#rc').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; S.regCat = b.dataset.c; document.querySelectorAll('#rc .chip').forEach(c => c.classList.toggle('on', c === b)); hap(); };
   $('#reg').onclick = async () => {
     $('#reg').disabled = true;
-    const r = await api('/channel', { username: $('#un').value, price: $('#pr').value });
-    r.error ? toast(r.error, true) : toast('Submitted. You will be notified after approval.');
+    const r = await api('/channel', { username: $('#un').value, price: $('#pr').value, category: S.regCat });
+    r.error ? toast(r.error, true) : toast(t('Submitted. You will be notified after approval.'));
     await load();
   };
 }
 
 // ---------- Wallet ----------
 function vWallet() {
-  const m = S.me;
+  const m = S.me, link = `https://t.me/${m.botUsername || 'YOUR_BOT'}?start=ref_${m.me.id}`;
   view.innerHTML = `
-  <div class="card"><div class="sh">${tile('out', 'amber')}<div><h2>Withdraw</h2><p>Minimum ${birr(m.minWithdraw)}</p></div></div>
-    <label class="l" style="margin-top:0">Amount (ETB)</label><input id="amt" type="number" inputmode="numeric" placeholder="0">
-    <div class="chips" style="margin-top:8px"><button class="chip" id="all">Max (${birr(m.me.balance)})</button></div>
-    <label class="l">Method</label><div class="seg" id="seg"><button data-m="Telebirr" class="${S.method === 'Telebirr' ? 'on' : ''}">Telebirr</button><button data-m="CBE" class="${S.method === 'CBE' ? 'on' : ''}">CBE</button></div>
-    <label class="l">Account or phone number</label><input id="acc" inputmode="numeric">
-    <button class="btn" id="wd" style="background:var(--amber);color:#1a1200">${ico('out')}Request withdrawal</button></div>
-  <div class="card"><div class="sh"><h2>Withdrawal history</h2></div>${m.withdrawals.length ? m.withdrawals.map(w => `<div class="row">${tile('out', w.status === 'paid' ? 'green' : w.status === 'rejected' ? 'coral' : 'amber')}<div class="m"><b>${birr(w.amount)}</b><br><small>${w.method} · ${esc(w.account)}</small></div>${badge(w.status)}</div>`).join('') : empty('wallet', 'amber', 'No withdrawals yet')}</div>`;
+  <div class="card"><div class="sh">${tile('out', 'amber')}<div><h2>${t('Withdraw')}</h2><p>${t('Minimum')} ${birr(m.minWithdraw)}</p></div></div>
+    <label class="l" style="margin-top:0">${t('Amount (ETB)')}</label><input id="amt" type="number" inputmode="numeric" placeholder="0">
+    <div class="chips" style="margin-top:8px"><button class="chip" id="all">${t('Max')} (${birr(m.me.balance)})</button></div>
+    <label class="l">${t('Method')}</label><div class="seg" id="seg"><button data-m="Telebirr" class="${S.method === 'Telebirr' ? 'on' : ''}">Telebirr</button><button data-m="CBE" class="${S.method === 'CBE' ? 'on' : ''}">CBE</button></div>
+    <label class="l">${t('Account or phone number')}</label><input id="acc" inputmode="numeric">
+    <button class="btn" id="wd" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#1a1200">${ico('out')}${t('Request withdrawal')}</button></div>
+  <div class="card"><div class="sh">${tile('gift', 'green')}<div><h2>${t('Invite friends')}</h2><p>${t('Earn')} ${m.refPercent}% ${t('when someone you invited pays for an ad')}</p></div></div>
+    <div class="grid"><div class="stat"><small>${t('Invited')}</small><b>${m.refCount}</b></div><div class="stat"><small>${t('Earned')}</small><b>${birr(m.me.ref_earned || 0)}</b></div></div>
+    <button class="btn soft" id="rl">${ico('link')}${t('Copy invite link')}</button></div>
+  <div class="card"><div class="sh"><h2>${t('Withdrawal history')}</h2></div>${m.withdrawals.length ? m.withdrawals.map(w => `<div class="row">${tile('out', w.status === 'paid' ? 'green' : w.status === 'rejected' ? 'coral' : 'amber')}<div class="m"><b>${birr(w.amount)}</b><br><small>${w.method} · ${esc(w.account)}</small></div>${badge(w.status)}</div>`).join('') : empty('wallet', 'amber', t('No withdrawals yet'))}</div>`;
+  $('#rl').onclick = () => copy(link, 'Link copied');
   $('#all').onclick = () => { $('#amt').value = Math.floor(m.me.balance); hap(); };
   $('#seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.method = b.dataset.m; document.querySelectorAll('#seg button').forEach(x => x.classList.toggle('on', x === b)); hap(); };
   $('#wd').onclick = async () => {
     $('#wd').disabled = true;
     const r = await api('/withdraw', { amount: $('#amt').value, method: S.method, account: $('#acc').value });
-    r.error ? toast(r.error, true) : toast('Request sent');
+    r.error ? toast(r.error, true) : toast(t('Request sent'));
     await load();
   };
 }
@@ -291,14 +364,48 @@ function vWallet() {
 // ---------- Orders ----------
 function vOrders() {
   const o = S.mine.orders;
-  view.innerHTML = o.length ? o.map(x => `<div class="card"><div class="row" style="padding-top:0"><div class="m"><b style="font-size:16px">${x.code}</b><br><small>${birr(x.total)} · ${x.hours}h</small></div>${badge(x.status)}</div>
+  view.innerHTML = `<button class="btn soft sm" id="rf" style="margin:0 0 12px">${ico('refresh')}${t('Refresh')}</button>` + (o.length ? o.map(x => `<div class="card"><div class="row" style="padding-top:0"><div class="m"><b style="font-size:17px">${x.code}</b><br><small>${birr(x.total)} · ${x.hours}h${x.start_at > Date.now() ? ' · ' + t('Starts') + ' ' + new Date(x.start_at).toLocaleString() : ''}</small></div>${badge(x.status)}</div>
     ${x.items.map(i => { const p = i.status === 'live' && i.ends_at ? Math.min(100, Math.max(0, 100 - (i.ends_at - Date.now()) / (x.hours * 36000))) : 0;
-      return `<div class="row">${tile('chan', 'violet')}<div class="m"><b>${esc(i.name)}</b>${i.status === 'live' && i.ends_at ? `<br><small>${left(i.ends_at)} left</small><div class="prog"><i style="width:${p}%"></i></div>` : ''}</div>${badge(i.status)}</div>`; }).join('')}
-    ${x.status === 'awaiting_pay' ? `<div class="box" style="margin-top:8px;font-size:14px">Pay, then send the payment screenshot to the bot chat. Include code ${x.code} in the payment note.</div>` : ''}</div>`).join('')
-    : `<div class="card">${empty('list', 'green', 'No orders yet')}<button class="btn" id="n">${ico('ads')}Create an ad</button></div>`;
+      return `<div class="row">${tile('chan', 'violet')}<div class="m"><b>${esc(i.name)}</b>${i.status === 'live' && i.ends_at ? `<br><small>${left(i.ends_at)} ${t('left')}</small><div class="prog"><i style="width:${p}%"></i></div>` : ''}${x.btn && i.clicks ? `<br><small>${i.clicks} ${t('clicks')}</small>` : ''}</div>${badge(i.status)}</div>`; }).join('')}
+    ${x.status === 'awaiting_pay' ? `<div class="box" style="font-size:14px">${t('Pay, then send the payment screenshot to the bot chat. Include code')} ${x.code} ${t('in the payment note.')}</div>
+      <div class="two">${S.me.chapa ? `<button class="btn green sm" data-a="pay" data-id="${x.id}">${ico('card')}${t('Pay online')}</button>` : ''}<button class="btn red sm" data-a="cancel" data-id="${x.id}">${ico('x')}${t('Cancel order')}</button></div>`
+      : `<button class="btn soft sm" data-a="repeat" data-id="${x.id}">${ico('refresh')}${t('Repeat')}</button>`}</div>`).join('')
+    : `<div class="card">${empty('list', 'green', t('No orders yet'))}<button class="btn" id="n">${ico('ads')}${t('Create an ad')}</button></div>`);
+  $('#rf').onclick = load;
+  view.querySelectorAll('[data-a]').forEach(b => b.onclick = async () => {
+    const id = +b.dataset.id, a = b.dataset.a;
+    if (a === 'pay') return payOnline(id);
+    if (a === 'cancel') { if (!confirm(t('Cancel this order?'))) return; const r = await api('/order/cancel', { id }); r.error ? toast(r.error, true) : toast(t('Order cancelled')); return load(); }
+    const r = await api('/order/repeat', { id }); if (r.error) return toast(r.error, true);
+    S.tab = 'ads'; S.done = r; await load();
+  });
   const n = $('#n'); if (n) n.onclick = () => go('ads');
 }
 
+// ---------- Admin ----------
+async function vAdmin() {
+  view.innerHTML = '<div class="skel"></div><div class="skel"></div>';
+  const r = await api('/admin/stats'); if (r.error) { view.innerHTML = `<div class="card empty">${tile('warn', 'coral')}${esc(r.error)}</div>`; return; }
+  const s = r.stats;
+  view.innerHTML = `
+  <div class="card"><div class="sh">${tile('chart', 'blue')}<div><h2>${t('Dashboard')}</h2></div></div>
+    <div class="grid"><div class="stat"><small>${t('Users')}</small><b>${s.users}</b></div><div class="stat"><small>${t('Channels')}</small><b>${s.channels}</b></div>
+    <div class="stat"><small>${t('Live ads')}</small><b>${s.live}</b></div><div class="stat"><small>${t('Paid orders')}</small><b>${s.paid_orders}</b></div></div>
+    <div class="stat" style="margin-top:10px"><small>${t('Revenue')}</small><b style="color:var(--amber)">${birr(s.revenue)}</b></div></div>
+  <div class="card"><div class="sh"><div><h2>${t('Pending')}</h2><p>${t('Waiting for approval (use the bot buttons)')}</p></div></div>
+    <div class="grid"><div class="stat"><small>${t('Orders')}</small><b>${r.pendingOrders.length}</b></div><div class="stat"><small>${t('Channels')}</small><b>${r.pendingChannels.length}</b></div><div class="stat"><small>${t('Withdrawals')}</small><b>${r.pendingWd.length}</b></div></div></div>
+  <div class="card"><div class="sh">${tile('shield', 'coral')}<div><h2>${t('Block or unblock a user')}</h2></div></div>
+    <input id="uid" inputmode="numeric" placeholder="${t('User ID')}"><div class="two"><button class="btn red sm" id="bn">${t('Block')}</button><button class="btn soft sm" id="ub">${t('Unblock')}</button></div></div>
+  <div class="card"><div class="sh">${tile('tag', 'green')}<div><h2>${t('Coupons')}</h2></div></div>
+    ${r.coupons.map(c => `<div class="row"><div class="m"><b>${esc(c.code)}</b><br><small>${c.percent}% · ${c.uses} ${t('uses left')}</small></div></div>`).join('')}
+    <label class="l">${t('Code')}</label><input id="cc" autocapitalize="characters"><label class="l">${t('Percent')}</label><input id="cp" type="number" inputmode="numeric" placeholder="10"><label class="l">${t('Uses')}</label><input id="cu" type="number" inputmode="numeric" placeholder="50">
+    <button class="btn" id="sc">${t('Save coupon')}</button></div>`;
+  const ban = v => async () => { const x = await api('/admin/ban', { user_id: $('#uid').value, ban: v }); x.error ? toast(x.error, true) : toast(t('Done')); };
+  $('#bn').onclick = ban(true); $('#ub').onclick = ban(false);
+  $('#sc').onclick = async () => { const x = await api('/admin/coupon', { code: $('#cc').value, percent: $('#cp').value, uses: $('#cu').value }); x.error ? toast(x.error, true) : (toast(t('Done')), vAdmin()); };
+}
+
+document.addEventListener('visibilitychange', () => { if (!document.hidden && ['orders', 'wallet'].includes(S.tab)) load(); });
 load();
 </script>
 </body>
