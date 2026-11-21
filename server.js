@@ -63,7 +63,7 @@ const chPrice = c => c.custom_price || Math.max(MIN_PRICE, Math.round(c.subs / 1
 // ---------- Express ----------
 const app = express();
 app.use(express.json({ limit: '200kb' }));
-app.use(async (req, res, next) => { try { await init(); next(); } catch (e) { console.log('db', e.message); res.status(500).json({ error: 'የዳታቤዝ ግንኙነት አልተሳካም: ' + e.message }); } });
+app.use(async (req, res, next) => { try { if (!DB_URL) return res.status(500).json({ error: 'DATABASE_URL አልተገኘም። በ Vercel → Settings → Environment Variables ውስጥ አስገብተህ Redeploy አድርግ' }); await init(); next(); } catch (e) { console.log('db', e.message); res.status(500).json({ error: 'የዳታቤዝ ግንኙነት አልተሳካም: ' + e.message }); } });
 const h = fn => (req, res) => fn(req, res).catch(e => { console.log(e); res.status(500).json({ error: 'የሰርቨር ስህተት' }); });
 
 async function auth(req, res, next) {
