@@ -1,4 +1,4 @@
-// Ad Marketplace Mini App — server.js (Vercel + Postgres, webhook mode)
+// Ad Marketplace Mini App — server.js (Vercel + Neon Postgres, webhook mode)
 // Also runs on a VPS: `node server.js` uses long polling when not on Vercel.
 const express = require('express'), crypto = require('crypto'), path = require('path'), { Pool, types } = require('pg');
 types.setTypeParser(20, v => parseInt(v, 10)); // BIGINT -> number
@@ -13,7 +13,14 @@ const ON_VERCEL = !!E.VERCEL;
 if (!BOT_TOKEN || !WEBAPP_URL || !E.DATABASE_URL || !SECRET) { console.log('Set BOT_TOKEN, WEBAPP_URL, DATABASE_URL, SECRET'); if (!ON_VERCEL) process.exit(1); }
 
 // ---------- Database (Postgres) ----------
-const pool = new Pool({ connectionString: E.DATABASE_URL, max: 3, ssl: /localhost|127\.0\.0\.1/.test(E.DATABASE_URL || '') ? false : { rejectUnauthorized: false } });
+// Neon Postgres: paste Neon's *pooled* connection string into DATABASE_URL.
+const pool = new Pool({
+  connectionString: E.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },      // Neon requires SSL
+  max: ON_VERCEL ? 1 : 5,                  // one connection per serverless instance
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 15000           // allows Neon to wake from idle
+});
 const q = (t, p = []) => pool.query(t, p).then(r => r.rows);
 const one = async (t, p) => (await q(t, p))[0];
 let ready;
