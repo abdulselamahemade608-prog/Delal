@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delal</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#eef2f7;--card:#fff;--ink:#0f1b2d;--mute:#6a7688;--line:#e2e8f0;--soft:#f4f7fb;
+--blue:#2563eb;--green:#16a34a;--amber:#f59e0b;--violet:#7c3aed;--coral:#ef4444;--navy:#0b1730;--gold:#ffc24b}
+[data-theme=dark]{--bg:#0b1220;--card:#141d2e;--ink:#eef2f8;--mute:#93a0b5;--line:#243049;--soft:#1a2539;
+--blue:#5b9bff;--green:#4ade80;--amber:#fbbf24;--violet:#a78bfa;--coral:#ff7b7b;--navy:#0a1a3a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,currentColor 14%,transparent)}
+.blue{color:var(--blue)}.green{color:var(--green)}.amber{color:var(--amber)}.violet{color:var(--violet)}.coral{color:var(--coral)}
+.hero{margin:12px 14px;padding:18px;border-radius:22px;color:#fff;background:radial-gradient(120% 140% at 100% 0,#2b5bd7 0,transparent 55%),linear-gradient(160deg,var(--navy),#10285a)}
+.hero .top{display:flex;justify-content:space-between;align-items:center}
+.hero small{opacity:.75}.hero .amt{font-size:32px;font-weight:800;color:var(--gold);letter-spacing:-.5px;line-height:1.15}
+.hero .brand{font-weight:800;letter-spacing:.3px;opacity:.9}
+.pills{display:flex;gap:8px;margin-top:12px}
+.pill2{flex:1;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);font-size:12px}
+.pill2 b{display:block;font-size:17px}
+.hero .acts{display:flex;gap:10px;margin-top:12px}
+.hero button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font:inherit;font-size:14px}
+main{padding:0 14px}
+.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(15,27,45,.06)}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sh h2{margin:0;font-size:16px}.sh p{margin:0;font-size:12.5px;color:var(--mute)}
+.num{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+label.l{display:block;font-size:13px;color:var(--mute);margin:12px 0 6px}
+input,textarea{width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--soft);color:var(--ink);font:inherit;outline:0}
+input:focus,textarea:focus{border-color:var(--blue)}
+textarea{min-height:110px;resize:vertical}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;font-size:14px}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.seg{display:flex;background:var(--soft);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;padding:10px;border:0;border-radius:9px;background:none;color:var(--mute);font:inherit;font-weight:600}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.btn{width:100%;margin-top:14px;padding:14px;border:0;border-radius:14px;background:var(--blue);color:#fff;font:inherit;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:disabled{opacity:.5}.btn.soft{background:var(--soft);color:var(--ink)}
+.bubble{background:var(--soft);border-radius:14px 14px 14px 4px;padding:8px;margin-top:10px;max-width:92%;word-break:break-word;font-size:14px}
+.bubble img{width:100%;border-radius:10px;display:block;margin-bottom:6px}
+.bubble .t{padding:2px 6px 4px}.bubble .hint{color:var(--mute)}
+.search{position:relative;margin-bottom:10px}.search .i{position:absolute;left:12px;top:12px;color:var(--mute)}.search input{padding-left:40px}
+.ch{display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--line);border-radius:14px;margin-bottom:8px}
+.ch.on{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 8%,transparent)}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none}
+.ch .m{flex:1;min-width:0}.ch .m b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch .m small{color:var(--mute)}
+.pr{text-align:right}.pr b{color:var(--amber);display:block;line-height:1.2}.pr small{color:var(--mute);font-size:11px}
+.tick{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:#fff;flex:none}
+.ch.on .tick{background:var(--blue);border-color:var(--blue)}.tick .i{width:14px;height:14px;stroke-width:3}
+.toggle{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px;border-radius:14px;background:var(--soft)}
+.toggle div{flex:1}.toggle small{color:var(--mute)}
+.sw{width:46px;height:28px;border-radius:99px;background:var(--line);position:relative;border:0;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.15s}
+.sw.on{background:var(--green)}.sw.on::after{left:21px}
+.bar{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom,0px));padding:10px 14px;background:var(--card);border-top:1px solid var(--line);display:flex;align-items:center;gap:12px;z-index:5}
+.bar .s{flex:1}.bar small{color:var(--mute);display:block;line-height:1.2}.bar b{font-size:19px;color:var(--amber)}
+.bar button{padding:13px 20px;border:0;border-radius:14px;background:var(--blue);color:#fff;font:inherit;font-weight:700;display:flex;gap:8px;align-items:center}
+.bar button:disabled{opacity:.45}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:6}
+nav button{flex:1;background:none;border:0;padding:9px 2px 8px;color:var(--mute);font:inherit;font-size:11.5px;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button.on{font-weight:700}nav button.on .i{stroke-width:2.4}
+nav button:nth-child(1).on{color:var(--blue)}nav button:nth-child(2).on{color:var(--violet)}nav button:nth-child(3).on{color:var(--amber)}nav button:nth-child(4).on{color:var(--green)}
+.row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}.row .m{flex:1;min-width:0}.row small{color:var(--mute)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:color-mix(in srgb,currentColor 13%,transparent);white-space:nowrap}
+.badge .i{width:13px;height:13px;stroke-width:2.6}
+.prog{height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}.prog i{display:block;height:100%;background:var(--blue);border-radius:99px}
+.empty{text-align:center;color:var(--mute);padding:22px 10px}.empty .ic{margin:0 auto 10px;width:52px;height:52px;border-radius:16px}
+.steps{margin:6px 0 0;padding:0;list-style:none}.steps li{display:flex;gap:12px;align-items:flex-start;padding:8px 0}
+.box{background:var(--soft);border-radius:14px;padding:14px;margin-top:10px;white-space:pre-line}
+.code{font-size:26px;font-weight:800;letter-spacing:1px;text-align:center;color:var(--blue)}
+.ok-big{width:64px;height:64px;border-radius:50%;background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);display:grid;place-items:center;margin:6px auto 12px}
+.ok-big .i{width:32px;height:32px;stroke-width:3}
+.toast{position:fixed;left:14px;right:14px;top:12px;padding:13px 14px;border-radius:14px;background:var(--navy);color:#fff;z-index:20;display:flex;gap:10px;align-items:center;transform:translateY(-90px);transition:.25s;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast.show{transform:none}.toast.err{background:#b91c1c}
+.skel{border-radius:18px;height:120px;margin-bottom:12px;background:linear-gradient(90deg,var(--card) 25%,var(--soft) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.skel{animation:none}.toast,.sw::after{transition:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-ads" viewBox="0 0 24 24"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
+<symbol id="i-chan" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19.1 4.9a10 10 0 0 1 0 14.2M4.9 19.1a10 10 0 0 1 0-14.2"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2-2h11v3"/><path d="M4 7v10a2 2 0 0 0 2 2h13a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H6a2 2 0 0 1-2-1z"/><circle cx="16" cy="13.5" r="1"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 17v5M9 3h6l-1 6 3 3H7l3-3z"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+<symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></symbol>
+<symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13l3-8h12l3 8v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M3 13h5l1 3h6l1-3h5"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></symbol>
+</defs></svg>
+
+<div class="hero">
+  <div class="top"><span class="brand">Delal</span><small id="hello"></small></div>
+  <small>Balance</small>
+  <div class="amt" id="bal">0 ETB</div>
+  <div class="pills"><div class="pill2"><small>Live ads</small><b id="s1">0</b></div><div class="pill2"><small>My channels</small><b id="s2">0</b></div><div class="pill2"><small>Orders</small><b id="s3">0</b></div></div>
+  <div class="acts">
+    <button id="h1"><svg class="i"><use href="#i-out"/></svg>Withdraw</button>
+    <button id="h2"><svg class="i"><use href="#i-plus"/></svg>Add channel</button>
+  </div>
+</div>
+<main id="view"><div class="skel"></div><div class="skel"></div></main>
+<div id="barwrap"></div>
+<nav id="nav">
+  <button data-t="ads" class="on"><svg class="i"><use href="#i-ads"/></svg>Advertise</button>
+  <button data-t="chan"><svg class="i"><use href="#i-chan"/></svg>Publisher</button>
+  <button data-t="wallet"><svg class="i"><use href="#i-wallet"/></svg>Wallet</button>
+  <button data-t="orders"><svg class="i"><use href="#i-list"/></svg>Orders</button>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+const tg = (window.Telegram && window.Telegram.WebApp) || { initData: '', colorScheme: 'light', ready() {}, expand() {}, close() { history.back(); } };
+tg.ready(); tg.expand();
+document.documentElement.dataset.theme = tg.colorScheme === 'dark' || (!tg.initData && matchMedia('(prefers-color-scheme:dark)').matches) ? 'dark' : 'light';
+const $ = s => document.querySelector(s), view = $('#view'), barwrap = $('#barwrap');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const birr = n => (Math.round(n * 100) / 100) + ' ETB';
+const ico = (n, c = '') => `<svg class="i ${c}"><use href="#i-${n}"/></svg>`;
+const tile = (n, c) => `<span class="ic ${c}">${ico(n)}</span>`;
+const kfmt = n => n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n >= 1e3 ? (n / 1e3).toFixed(1) + 'K' : n;
+const hap = () => tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light');
+const COLORS = ['#2563eb', '#7c3aed', '#0d9488', '#db2777', '#ea580c', '#16a34a'];
+const av = t => `<span class="av" style="background:${COLORS[[...t].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length]}">${esc([...t][0] || '?').toUpperCase()}</span>`;
+const handle = c => c.username ? '@' + c.username : 'Private chat';
+const mode = new URLSearchParams(location.search).get('mode');
+let S = { me: null, channels: [], mine: { channels: [], orders: [] }, tab: mode === 'publisher' ? 'chan' : 'ads', q: '', picked: new Set(), d: { html: '', photo: '', hours: 6, pin: false }, done: null, method: 'Telebirr' };
+
+let tt; function toast(t, err) {
+  const el = $('#toast'); el.className = 'toast show' + (err ? ' err' : '');
+  el.innerHTML = ico(err ? 'warn' : 'check') + '<span>' + esc(t) + '</span>';
+  clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 3400);
+  tg.HapticFeedback && tg.HapticFeedback.notificationOccurred(err ? 'error' : 'success');
+}
+async function api(p, body) {
+  try {
+    const r = await fetch('/api' + p, { method: body ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json', 'x-init-data': tg.initData }, body: body ? JSON.stringify(body) : undefined });
+    if (r.status === 401) return { error: 'Open this app inside Telegram.' };
+    return await r.json();
+  } catch (e) { return { error: 'Connection failed. Please try again.' }; }
+}
+async function load() {
+  const [me, ch, mine] = await Promise.all([api('/me'), api('/channels'), api('/mine')]);
+  if (me.error || ch.error || mine.error) { view.innerHTML = `<div class="card empty">${tile('warn', 'coral')}${esc(me.error || ch.error || mine.error)}</div>`; return; }
+  S.me = me; S.channels = ch; S.mine = mine;
+  S.picked = new Set([...S.picked].filter(id => ch.some(c => c.id === id)));
+  $('#hello').textContent = 'Hi, ' + me.me.name; $('#bal').textContent = birr(me.me.balance);
+  $('#s1').textContent = mine.orders.reduce((n, o) => n + o.items.filter(i => i.status === 'live').length, 0);
+  $('#s2').textContent = mine.channels.length; $('#s3').textContent = mine.orders.length;
+  render();
+}
+const ST = { awaiting_pay: ['Awaiting payment', 'amber', 'clock'], pending: ['In review', 'amber', 'clock'], active: ['Active', 'blue', 'play'], done: ['Completed', 'green', 'check'], rejected: ['Rejected', 'coral', 'x'], approved: ['Approved', 'green', 'check'], live: ['Live', 'blue', 'play'], queued: ['Queued', 'amber', 'clock'], failed: ['Failed', 'coral', 'x'], removed: ['Removed', 'coral', 'x'], closing: ['Finishing', 'blue', 'clock'], paid: ['Paid', 'green', 'check'] };
+const badge = s => { const [t, c, i] = ST[s] || [s, 'amber', 'clock']; return `<span class="badge ${c}">${ico(i)}${t}</span>`; };
+const left = ms => { const m = Math.max(0, Math.round((ms - Date.now()) / 60000)); return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm'; };
+const empty = (i, c, t) => `<div class="empty">${tile(i, c)}${t}</div>`;
+// keep only tags Telegram supports in the preview
+const clean = h => String(h).replace(/<[^>]*>/g, t => /^<\/?(b|i|u|s|em|strong|code|pre)>$/i.test(t) || /^<a href="https?:[^"<>]*">$/i.test(t) || /^<\/a>$/i.test(t) ? t : t.replace(/</g, '&lt;').replace(/>/g, '&gt;')).replace(/\n/g, '<br>');
+
+function render() {
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.t === S.tab));
+  barwrap.innerHTML = ''; window.scrollTo(0, 0);
+  ({ ads: vAds, chan: vChan, wallet: vWallet, orders: vOrders })[S.tab]();
+}
+const go = t => { S.tab = t; S.done = null; hap(); render(); };
+$('#nav').onclick = e => { const b = e.target.closest('button'); if (b) go(b.dataset.t); };
+$('#h1').onclick = () => go('wallet'); $('#h2').onclick = () => go('chan');
+
+// ---------- Advertise ----------
+const total = () => S.channels.filter(c => S.picked.has(c.id)).reduce((t, c) => t + c.price * S.d.hours + (S.d.pin ? S.me.pinPrice : 0), 0);
+const chList = () => {
+  const f = S.q.trim().toLowerCase(), list = S.channels.filter(c => !f || (c.title + ' ' + c.username).toLowerCase().includes(f));
+  return list.length ? list.map(c => `<div class="ch ${S.picked.has(c.id) ? 'on' : ''}" data-id="${c.id}">${av(c.title)}
+      <div class="m"><b>${esc(c.title)}</b><small>${esc(handle(c))} · ${kfmt(c.subs)} members</small></div>
+      <div class="pr"><b>${birr(c.price)}</b><small>per hour</small></div><span class="tick">${ico('check')}</span></div>`).join('')
+    : empty('chan', 'violet', S.channels.length ? 'No match for your search' : 'No approved channels yet');
+};
+function vAds() {
+  if (S.done) return vDone();
+  const d = S.d;
+  view.innerHTML = `
+  <div class="card"><div class="sh"><span class="num">1</span><div><h2>Write your ad</h2><p>Text and an optional photo</p></div></div>
+    <textarea id="html" placeholder="<b>New shop open!</b>&#10;Up to 30% off. <a href=&quot;https://t.me/...&quot;>Tap here</a>">${esc(d.html)}</textarea>
+    <label class="l">Photo link (optional)</label><input id="photo" inputmode="url" placeholder="https://.../image.jpg" value="${esc(d.photo)}">
+    <label class="l">Preview</label><div class="bubble" id="prev"></div></div>
+  <div class="card"><div class="sh"><span class="num">2</span><div><h2>Choose channels and groups</h2><p>${S.channels.length} available</p></div></div>
+    <div class="search">${ico('search')}<input id="q" placeholder="Search channels" value="${esc(S.q)}"></div><div id="list">${chList()}</div></div>
+  <div class="card"><div class="sh"><span class="num">3</span><div><h2>Duration</h2><p>How long the ad stays posted</p></div></div>
+    <div class="chips" id="chips">${[1, 6, 12, 24, 48, 72].map(h => `<button class="chip ${d.hours === h ? 'on' : ''}" data-h="${h}">${h}h</button>`).join('')}</div>
+    <label class="l">Or enter hours (1-168)</label><input id="hours" type="number" min="1" max="168" inputmode="numeric" value="${d.hours}">
+    <div class="toggle">${tile('pin', 'amber')}<div><b>Pin the post</b><br><small>+${birr(S.me.pinPrice)} per channel</small></div><button class="sw ${d.pin ? 'on' : ''}" id="pin" aria-label="Pin the post"></button></div></div>`;
+  barwrap.innerHTML = `<div class="bar"><div class="s"><small id="cnt"></small><b id="tot"></b></div><button id="go">${ico('send')}Create order</button></div>`;
+  const upd = () => {
+    d.html = $('#html').value; d.photo = $('#photo').value.trim();
+    $('#prev').innerHTML = (d.photo ? `<img src="${esc(d.photo)}" onerror="this.remove()">` : '') + `<div class="t">${d.html ? clean(d.html) : '<span class="hint">Your preview appears here</span>'}</div>`;
+    $('#tot').textContent = birr(total()); $('#cnt').textContent = S.picked.size + ' selected · ' + d.hours + ' hour(s)';
+    $('#go').disabled = !d.html.trim() || !S.picked.size;
+  };
+  const bind = () => view.querySelectorAll('.ch').forEach(el => el.onclick = () => { const id = +el.dataset.id; S.picked.has(id) ? S.picked.delete(id) : S.picked.add(id); el.classList.toggle('on'); hap(); upd(); });
+  $('#html').oninput = $('#photo').oninput = upd;
+  $('#q').oninput = e => { S.q = e.target.value; $('#list').innerHTML = chList(); bind(); };
+  $('#hours').oninput = e => { d.hours = Math.min(168, Math.max(1, +e.target.value || 1)); document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', +c.dataset.h === d.hours)); upd(); };
+  $('#chips').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; d.hours = +b.dataset.h; $('#hours').value = d.hours; document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c === b)); hap(); upd(); };
+  $('#pin').onclick = e => { d.pin = !d.pin; e.target.classList.toggle('on', d.pin); hap(); upd(); };
+  bind();
+  $('#go').onclick = async () => {
+    $('#go').disabled = true;
+    const r = await api('/order', { html: d.html, photo: d.photo, hours: d.hours, pin: d.pin, channels: [...S.picked] });
+    if (r.error) { toast(r.error, true); upd(); return; }
+    S.done = r; S.d = { html: '', photo: '', hours: 6, pin: false }; S.picked.clear(); await load();
+  };
+  upd();
+}
+function vDone() {
+  const d = S.done;
+  view.innerHTML = `<div class="card"><div class="ok-big">${ico('check')}</div>
+    <div style="text-align:center"><b style="font-size:18px">Order created</b><br><small style="color:var(--mute)">Total to pay</small><div style="font-size:28px;font-weight:800;color:var(--amber)">${birr(d.total)}</div></div>
+    <div class="box"><div style="text-align:center;color:var(--mute);font-size:13px">Order code</div><div class="code">${d.code}</div></div>
+    <button class="btn soft" id="cp">${ico('copy')}Copy code</button></div>
+  <div class="card"><div class="sh"><div><h2>How to pay</h2></div></div><div class="box" style="margin-top:0">${esc(S.me.payInfo)}</div>
+    <ul class="steps">
+      <li><span class="num">1</span><div>Pay to the account above and write the code <b>${d.code}</b> in the payment note.</div></li>
+      <li><span class="num">2</span><div>Send the payment screenshot to the bot chat.</div></li>
+      <li><span class="num">3</span><div>After an administrator approves it, your ad is posted automatically.</div></li></ul>
+    <button class="btn" id="bot">${ico('send')}Go to the bot</button></div>`;
+  $('#cp').onclick = () => { navigator.clipboard && navigator.clipboard.writeText(d.code); toast('Code copied'); };
+  $('#bot').onclick = () => tg.close();
+}
+
+// ---------- Publisher ----------
+function vChan() {
+  const code = S.me.me.code || '';
+  view.innerHTML = `
+  <div class="card"><div class="sh">${tile('chan', 'violet')}<div><h2>Earn from your channel or group</h2><p>You receive ${S.me.ownerShare}% of every ad price</p></div></div>
+    <ul class="steps"><li><span class="num" style="background:var(--violet)">1</span><div>Add this bot as an administrator (Post Messages for channels, Send Messages and Photos for groups).</div></li>
+    <li><span class="num" style="background:var(--violet)">2</span><div>Enter the public username below, or run the /connect command with your code inside the chat.</div></li>
+    <li><span class="num" style="background:var(--violet)">3</span><div>An administrator approves it and you can receive ads.</div></li></ul></div>
+  <div class="card"><div class="sh">${tile('key', 'amber')}<div><h2>Your verification code</h2><p>For private groups and channels</p></div></div>
+    <div class="box" style="margin-top:0"><div class="code" style="color:var(--amber)">${esc(code)}</div></div>
+    <button class="btn soft" id="cc">${ico('copy')}Copy /connect command</button></div>
+  <div class="card"><div class="sh"><h2>Add by username</h2></div>
+    <label class="l" style="margin-top:0">Channel or group username</label><input id="un" placeholder="@mychannel" autocapitalize="off">
+    <label class="l">Your price per hour (optional)</label><input id="pr" type="number" inputmode="numeric" placeholder="Leave empty to price by member count">
+    <button class="btn" id="reg" style="background:var(--violet)">${ico('plus')}Submit for approval</button></div>
+  <div class="card"><div class="sh"><h2>My channels and groups</h2></div>${S.mine.channels.length ? S.mine.channels.map(c => `<div class="row">${av(c.title)}<div class="m"><b>${esc(c.title)}</b><br><small>${esc(handle(c))} · ${kfmt(c.subs)} · ${birr(c.price)}/h</small></div>${badge(c.status)}</div>`).join('') : empty('inbox', 'violet', 'You have not added a channel yet')}</div>`;
+  $('#cc').onclick = () => { navigator.clipboard && navigator.clipboard.writeText('/connect ' + code); toast('Copied. Paste it inside your group or channel.'); };
+  $('#reg').onclick = async () => {
+    $('#reg').disabled = true;
+    const r = await api('/channel', { username: $('#un').value, price: $('#pr').value });
+    r.error ? toast(r.error, true) : toast('Submitted. You will be notified after approval.');
+    await load();
+  };
+}
+
+// ---------- Wallet ----------
+function vWallet() {
+  const m = S.me;
+  view.innerHTML = `
+  <div class="card"><div class="sh">${tile('out', 'amber')}<div><h2>Withdraw</h2><p>Minimum ${birr(m.minWithdraw)}</p></div></div>
+    <label class="l" style="margin-top:0">Amount (ETB)</label><input id="amt" type="number" inputmode="numeric" placeholder="0">
+    <div class="chips" style="margin-top:8px"><button class="chip" id="all">Max (${birr(m.me.balance)})</button></div>
+    <label class="l">Method</label><div class="seg" id="seg"><button data-m="Telebirr" class="${S.method === 'Telebirr' ? 'on' : ''}">Telebirr</button><button data-m="CBE" class="${S.method === 'CBE' ? 'on' : ''}">CBE</button></div>
+    <label class="l">Account or phone number</label><input id="acc" inputmode="numeric">
+    <button class="btn" id="wd" style="background:var(--amber);color:#1a1200">${ico('out')}Request withdrawal</button></div>
+  <div class="card"><div class="sh"><h2>Withdrawal history</h2></div>${m.withdrawals.length ? m.withdrawals.map(w => `<div class="row">${tile('out', w.status === 'paid' ? 'green' : w.status === 'rejected' ? 'coral' : 'amber')}<div class="m"><b>${birr(w.amount)}</b><br><small>${w.method} · ${esc(w.account)}</small></div>${badge(w.status)}</div>`).join('') : empty('wallet', 'amber', 'No withdrawals yet')}</div>`;
+  $('#all').onclick = () => { $('#amt').value = Math.floor(m.me.balance); hap(); };
+  $('#seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.method = b.dataset.m; document.querySelectorAll('#seg button').forEach(x => x.classList.toggle('on', x === b)); hap(); };
+  $('#wd').onclick = async () => {
+    $('#wd').disabled = true;
+    const r = await api('/withdraw', { amount: $('#amt').value, method: S.method, account: $('#acc').value });
+    r.error ? toast(r.error, true) : toast('Request sent');
+    await load();
+  };
+}
+
+// ---------- Orders ----------
+function vOrders() {
+  const o = S.mine.orders;
+  view.innerHTML = o.length ? o.map(x => `<div class="card"><div class="row" style="padding-top:0"><div class="m"><b style="font-size:16px">${x.code}</b><br><small>${birr(x.total)} · ${x.hours}h</small></div>${badge(x.status)}</div>
+    ${x.items.map(i => { const p = i.status === 'live' && i.ends_at ? Math.min(100, Math.max(0, 100 - (i.ends_at - Date.now()) / (x.hours * 36000))) : 0;
+      return `<div class="row">${tile('chan', 'violet')}<div class="m"><b>${esc(i.name)}</b>${i.status === 'live' && i.ends_at ? `<br><small>${left(i.ends_at)} left</small><div class="prog"><i style="width:${p}%"></i></div>` : ''}</div>${badge(i.status)}</div>`; }).join('')}
+    ${x.status === 'awaiting_pay' ? `<div class="box" style="margin-top:8px;font-size:14px">Pay, then send the payment screenshot to the bot chat. Include code ${x.code} in the payment note.</div>` : ''}</div>`).join('')
+    : `<div class="card">${empty('list', 'green', 'No orders yet')}<button class="btn" id="n">${ico('ads')}Create an ad</button></div>`;
+  const n = $('#n'); if (n) n.onclick = () => go('ads');
+}
+
+load();
+</script>
+</body>
+</html>
