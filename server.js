@@ -14,8 +14,10 @@ if (!BOT_TOKEN || !WEBAPP_URL || !E.DATABASE_URL || !SECRET) { console.log('Set 
 
 // ---------- Database (Postgres) ----------
 // Neon Postgres: paste Neon's *pooled* connection string into DATABASE_URL.
+// Clean common paste mistakes: psql '...' wrapper, quotes, channel_binding (not supported by node-pg)
+const DB_URL = (E.DATABASE_URL || '').trim().replace(/^psql\s+/, '').replace(/^['"]|['"]$/g, '').replace(/([?&])channel_binding=[^&]*&?/, '$1').replace(/[?&]$/, '');
 const pool = new Pool({
-  connectionString: E.DATABASE_URL,
+  connectionString: DB_URL,
   ssl: { rejectUnauthorized: false },      // Neon requires SSL
   max: ON_VERCEL ? 1 : 5,                  // one connection per serverless instance
   idleTimeoutMillis: 10000,
@@ -61,7 +63,7 @@ const chPrice = c => c.custom_price || Math.max(MIN_PRICE, Math.round(c.subs / 1
 // ---------- Express ----------
 const app = express();
 app.use(express.json({ limit: '200kb' }));
-app.use(async (req, res, next) => { try { await init(); next(); } catch (e) { console.log('db', e.message); res.status(500).json({ error: 'የዳታቤዝ ግንኙነት አልተሳካም' }); } });
+app.use(async (req, res, next) => { try { await init(); next(); } catch (e) { console.log('db', e.message); res.status(500).json({ error: 'የዳታቤዝ ግንኙነት አልተሳካም: ' + e.message }); } });
 const h = fn => (req, res) => fn(req, res).catch(e => { console.log(e); res.status(500).json({ error: 'የሰርቨር ስህተት' }); });
 
 async function auth(req, res, next) {
