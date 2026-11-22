@@ -166,7 +166,7 @@ async function sendAd(chat, o, url) { // text, one photo, or a 1-5 photo album; 
   if (ph.length === 1) return [(await tg('sendPhoto', { chat_id: chat, photo: mediaUrl(ph[0]), caption: text || undefined, parse_mode: pm, ...markup })).message_id];
   const ms = await tg('sendMediaGroup', { chat_id: chat, media: ph.map((id, i) => ({ type: 'photo', media: mediaUrl(id), ...(i === 0 && text ? { caption: text, parse_mode: pm } : {}) })) });
   const ids = ms.map(m => m.message_id);
-  if (markup.reply_markup) ids.push((await tg('sendMessage', { chat_id: chat, text: '👇', ...markup })).message_id); // albums cannot carry buttons
+  if (markup.reply_markup) ids.push((await tg('sendMessage', { chat_id: chat, text: '', ...markup })).message_id); // albums cannot carry buttons
   return ids;
 }
 const idsOf = i => String(i.msg_ids || i.msg_id || '').split(',').filter(Boolean).map(Number);
@@ -582,17 +582,19 @@ let lastTick = 0;
 const maybeTick = async () => { if (Date.now() - lastTick < 20000) return; lastTick = Date.now(); await tick().catch(e => console.log('tick', e.message)); };
 
 // ---------- Bot ----------
-const WELCOME = `👋 Welcome to <b>Addis Ad</b> — the Telegram ad marketplace.
+const WELCOME = `Welcome to <b>AddisAdBot Automation Marketplace</b>!
 
-<b>Advertisers:</b> pick a channel, choose your hours, pay, and the channel owner approves your ad. You can also pay per click.
-<b>Channel &amp; group owners:</b> add the bot as admin, verify your chat, share your advertiser link and earn ${OWNER_SHARE}% of every ad.
+Launch the <b>Delal</b> Mini App right inside Telegram to book channel/group ad slots or monetize your own channels &amp; groups.
 
-<b>Commands:</b>
-/app — open the Mini App
-/connect CODE — link a group/channel with your code
-/id — show your User ID and Chat ID
+<b>For Channel &amp; Group Owners:</b>
+1. Tap <b>Publisher / Owner Mode</b> below.
+2. Add this bot as an Administrator in your channel (with Post Messages) or group (with Send Messages &amp; Photos).
+3. Verify your channel/group inside the Mini App (or run /connect CODE inside your group).
 
-<b>አማርኛ:</b> ለማስታወቂያ "Advertiser"፣ ከቻናልዎ ገቢ ለማግኘት "Publisher / Owner Mode" ይጫኑ። ክፍያ በ Mini App ውስጥ (Wallet) ይፈጸማል።`;
+<b>Useful commands:</b>
+/app — Launch AddisAdBot Mini App
+/connect CODE — Link this group/channel using your verification token
+/id — View your User ID and this Chat ID`;
 async function connectCmd(m, code) {
   const chat = m.chat;
   if (chat.type === 'private') return say(chat.id, 'Run /connect CODE inside the group or channel you want to link. Your code is in the Mini App: Publisher > Add Chat.');
@@ -612,11 +614,13 @@ async function onMessage(m) {
   if (!priv || !uid) return;
   if (cmd === '/start') {
     const arg = parts[1] || '', ref = arg.startsWith('ref_') ? +arg.slice(4) || null : null;
+    try {
     await upsertUser(m.from, ref);
     if (ref && ref !== uid) await q('UPDATE users SET ref=$2 WHERE id=$1 AND ref IS NULL AND EXISTS(SELECT 1 FROM users WHERE id=$2) AND NOT EXISTS(SELECT 1 FROM orders WHERE user_id=$1)', [uid, ref]);
+    } catch (e) { console.log('start-db', e.message); }
     if (arg.startsWith('ch_')) { // advertiser link of a channel
       const c = await one("SELECT * FROM channels WHERE id=$1 AND status='approved'", [+arg.slice(3) || 0]);
-      if (c) return say(uid, `📣 <b>Advertise on ${esc(c.title)}</b>\n${esc(nm(c))} · ${c.subs} members\nFrom ${birr(pkgPrice(c, 'single'))} per post, or pay per click (${birr(cpcOf(c))}/click). Pick your hours, pay, and the owner approves.`, { reply_markup: kb([{ text: 'Book an ad', web_app: { url: `${WEBAPP_URL}/?ch=${c.id}` } }]) });
+      if (c) return say(uid, `<b>Advertise on ${esc(c.title)}</b>\n${esc(nm(c))} · ${c.subs} members\nFrom ${birr(pkgPrice(c, 'single'))} per post, or pay per click (${birr(cpcOf(c))}/click). Pick your hours, pay, and the owner approves.`, { reply_markup: kb([{ text: 'Book an ad', web_app: { url: `${WEBAPP_URL}/?ch=${c.id}` } }]) });
     }
     return say(uid, `${WELCOME}\n\nYour referral link: https://t.me/${await botName()}?start=ref_${uid}`, { reply_markup: menuKb() });
   }
