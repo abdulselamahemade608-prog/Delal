@@ -40,7 +40,7 @@ async function tx(fn) { // inside fn use ONLY `run` (the pool may have a single 
   catch (e) { await c.query('ROLLBACK').catch(() => { }); throw e; } finally { c.release(); }
 }
 class UErr extends Error { }
-const SCHEMA = '4';
+const SCHEMA = '5';
 let ready;
 const init = () => ready || (ready = (async () => {
   await q('CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT)');
@@ -93,6 +93,8 @@ CREATE TABLE IF NOT EXISTS ledger(id BIGSERIAL PRIMARY KEY, user_id BIGINT, amou
 CREATE INDEX IF NOT EXISTS ledger_user ON ledger(user_id, id);
 CREATE TABLE IF NOT EXISTS media(id TEXT PRIMARY KEY, owner BIGINT, data BYTEA, hash TEXT, created BIGINT);
 CREATE TABLE IF NOT EXISTS click_log(item_id BIGINT, h TEXT, PRIMARY KEY(item_id, h));
+CREATE TABLE IF NOT EXISTS notifications(id BIGSERIAL PRIMARY KEY, user_id BIGINT, type TEXT, title TEXT, body TEXT, created BIGINT, seen INTEGER DEFAULT 0);
+CREATE INDEX IF NOT EXISTS notif_user ON notifications(user_id, id);
 `);
   await q("INSERT INTO meta(k,v) VALUES('schema',$1) ON CONFLICT(k) DO UPDATE SET v=$1", [SCHEMA]);
 })().catch(e => { ready = null; throw e; }));
@@ -149,7 +151,14 @@ const M = {
   topup_ok: { en: a => `Your top-up of ${a} was approved and added to your wallet.`, am: a => `የ${a} ሙሌትዎ ጸድቆ ወደ ዋሌትዎ ተጨምሯል።` },
   topup_no: { en: () => 'Your top-up receipt was rejected. If you think this is a mistake, contact the administrator.', am: () => 'የሙሌት ደረሰኝዎ ተቀባይነት አላገኘም። ስህተት ከሆነ አድሚኑን ያነጋግሩ።' }
 };
-const say2 = async (uid, key, ...a) => say(uid, M[key][await getLang(uid)](...a));
+M.booked = { en: c => `Booking ${c} received. An admin will confirm your payment, then the channel owner reviews your ad.`, am: c => `ትዕዛዝ ${c} ደርሷል። አድሚን ክፍያውን ካረጋገጠ በኋላ የቻናሉ ባለቤት ማስታወቂያዎን ይገመግማል።` };
+const NT = { live: 'Ad published', fin_adv: 'Ad completed', fin_own: 'Ad completed', review: 'Booking confirmed', booked: 'Booking received', approved: 'Ad approved', rejected: 'Order rejected', expired: 'Order cancelled', refund_fail: 'Post failed', missed: 'Post missed', removed_own: 'Ad removed', removed_adv: 'Ad removed early', cpc_back: 'Budget returned', ref: 'Referral bonus', chan_ok: 'Chat approved', chan_no: 'Chat not approved', wd_paid: 'Withdrawal processed', wd_rej: 'Withdrawal rejected', topup_ok: 'Payment approved', topup_no: 'Top-up rejected' };
+const plain = t => String(t).replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+const say2 = async (uid, key, ...a) => { // Telegram message + the same text in the in-app notification list
+  const t = M[key][await getLang(uid)](...a);
+  q('INSERT INTO notifications(user_id,type,title,body,created) VALUES($1,$2,$3,$4,$5)', [uid, key, NT[key] || key, plain(t), Date.now()]).catch(e => console.log('notify', e.message));
+  return say(uid, t);
+};
 let ME;
 const botMe = async () => ME || (ME = await tg('getMe'));
 const botId = async () => (await botMe()).id;
@@ -440,7 +449,7 @@ app.post('/api/order', auth, h(async (req, res) => {
     throw e;
   }
   const o = await one('SELECT * FROM orders WHERE id=$1', [out.id]);
-  if (method === 'wallet') { await askOwner(o); await say2(req.uid, 'review', 'AD' + o.id, esc(nm(ch))); } else await notifyAdminPayment(o, ch, pf);
+  if (method === 'wallet') { await askOwner(o); await say2(req.uid, 'review', 'AD' + o.id, esc(nm(ch))); } else { await notifyAdminPayment(o, ch, pf); await say2(req.uid, 'booked', 'AD' + o.id); }
   res.json({ ok: true, id: out.id, code: 'AD' + out.id, total: out.total, discount: out.disc, status: o.status });
 }));
 app.post('/api/topup', auth, h(async (req, res) => {
@@ -495,6 +504,73 @@ app.post('/api/admin/coupon', auth, adm, h(async (req, res) => {
   if (!/^[A-Z0-9]{3,20}$/.test(code) || !(pct >= 1 && pct <= 90) || !(uses >= 1)) return res.json({ error: 'Code 3-20 letters/digits, percent 1-90, uses 1+.' });
   await q('INSERT INTO coupons(code,percent,uses) VALUES($1,$2,$3) ON CONFLICT(code) DO UPDATE SET percent=$2, uses=$3', [code, pct, uses]); res.json({ ok: true });
 }));
+
+// Shared by the bot buttons and the in-app Admin panel. Returns a short note, or null when it was already handled.
+async function adminDecide(kind, id, ok) {
+  if (kind === 'order') {
+    if (ok) { // bank money received -> owner reviews
+      const o = await one("UPDATE orders SET status='review' WHERE id=$1 AND status='pending' RETURNING *", [id]); if (!o) return null;
+      await q("UPDATE payments SET status='approved' WHERE order_id=$1 AND kind='order' AND status='pending'", [id]);
+      const c = await one('SELECT * FROM channels WHERE id=$1', [o.channel_id]);
+      await say2(o.user_id, 'review', 'AD' + id, esc(nm(c))); await askOwner(o); return 'Sent to owner';
+    }
+    const o = await one("UPDATE orders SET status='rejected' WHERE id=$1 AND status='pending' RETURNING *", [id]); if (!o) return null;
+    await q("UPDATE items SET status='cancelled' WHERE order_id=$1 AND status='queued'", [id]);
+    await q("UPDATE payments SET status='rejected' WHERE order_id=$1 AND kind='order' AND status='pending'", [id]);
+    await releaseCoupon(o); await say2(o.user_id, 'rejected', 'AD' + id, false); return 'Rejected';
+  }
+  if (kind === 'channel') {
+    const c = await one("UPDATE channels SET status=$2 WHERE id=$1 AND status='pending' RETURNING *", [id, ok ? 'approved' : 'rejected']); if (!c) return null;
+    await say2(c.owner_id, ok ? 'chan_ok' : 'chan_no', esc(nm(c))); return ok ? 'Approved' : 'Rejected';
+  }
+  if (kind === 'withdraw') {
+    const w = await one("UPDATE withdrawals SET status=$2 WHERE id=$1 AND status='pending' RETURNING *", [id, ok ? 'paid' : 'rejected']); if (!w) return null;
+    if (ok) { await say2(w.user_id, 'wd_paid', birr(w.amount), w.method); return 'Paid'; }
+    await credit(w.user_id, w.amount, 'refund', `withdrawal #${id} rejected`); await say2(w.user_id, 'wd_rej', birr(w.amount)); return 'Rejected';
+  }
+  if (kind === 'topup') {
+    const p = await one("UPDATE payments SET status=$2 WHERE id=$1 AND kind='topup' AND status='pending' RETURNING *", [id, ok ? 'approved' : 'rejected']); if (!p) return null;
+    if (ok) { await credit(p.user_id, p.amount, 'topup', '#' + id); await say2(p.user_id, 'topup_ok', birr(p.amount)); return 'Approved'; }
+    await say2(p.user_id, 'topup_no'); return 'Rejected';
+  }
+  return null;
+}
+app.get('/api/admin/queue', auth, adm, h(async (req, res) => res.json({
+  orders: await q("SELECT o.id,o.total,o.discount,o.pkg,o.user_id,o.created,c.title ctitle,c.username cuser,u.name uname,u.username uuser,p.tx_number,p.sender_name,p.sender_phone,p.receipt FROM orders o JOIN channels c ON c.id=o.channel_id LEFT JOIN users u ON u.id=o.user_id LEFT JOIN payments p ON p.order_id=o.id AND p.kind='order' WHERE o.status='pending' ORDER BY o.id LIMIT 50"),
+  topups: await q("SELECT p.id,p.user_id,p.amount,p.tx_number,p.sender_name,p.sender_phone,p.receipt,p.created,u.name uname,u.username uuser FROM payments p LEFT JOIN users u ON u.id=p.user_id WHERE p.kind='topup' AND p.status='pending' ORDER BY p.id LIMIT 50"),
+  channels: await q("SELECT c.id,c.title,c.username,c.subs,c.type,c.owner_id,u.name uname,u.username uuser FROM channels c LEFT JOIN users u ON u.id=c.owner_id WHERE c.status='pending' ORDER BY c.id LIMIT 50"),
+  withdrawals: await q("SELECT w.id,w.user_id,w.amount,w.method,w.account,w.created,u.name uname,u.username uuser FROM withdrawals w LEFT JOIN users u ON u.id=w.user_id WHERE w.status='pending' ORDER BY w.id LIMIT 50")
+})));
+app.post('/api/admin/decide', auth, adm, h(async (req, res) => {
+  const k = String(req.body.kind || ''), id = +req.body.id;
+  if (!['order', 'topup', 'channel', 'withdraw'].includes(k) || !id) return res.json({ error: 'Bad request.' });
+  const note = await adminDecide(k, id, !!req.body.approve);
+  res.json(note ? { ok: true, note } : { error: 'Already handled.' });
+}));
+app.get('/api/admin/users', auth, adm, h(async (req, res) => {
+  const s = String(req.query.q || '').trim().replace(/^@/, '').slice(0, 40);
+  res.json({ users: await q(`SELECT id,name,username,balance,banned FROM users WHERE $1='' OR id::text=$1 OR name ILIKE $2 OR username ILIKE $2 ORDER BY id DESC LIMIT 30`, [s, '%' + s + '%']) });
+}));
+app.post('/api/admin/coupon/delete', auth, adm, h(async (req, res) => { await q('DELETE FROM coupons WHERE code=$1', [String(req.body.code || '').trim().toUpperCase()]); res.json({ ok: true }); }));
+app.get('/api/admin/analytics', auth, adm, h(async (req, res) => {
+  const X = "(to_timestamp((created+10800000)/1000.0::float8) AT TIME ZONE 'UTC')", now = Date.now();
+  const grp = (fmt, since) => q(`SELECT ${fmt} k, COUNT(*) n, COALESCE(SUM(total),0) rev FROM orders WHERE status IN('active','done') AND created>$1 GROUP BY 1 ORDER BY 1`, [since]);
+  const day = await grp(`to_char(${X},'YYYY-MM-DD')`, now - 31 * 864e5), map = new Map(day.map(r => [r.k, r])), daily = [];
+  for (let i = 29; i >= 0; i--) { const k = new Date(now + EAT - i * 864e5).toISOString().slice(0, 10), r = map.get(k) || { n: 0, rev: 0 }; daily.push({ k, n: r.n, rev: r.rev }); }
+  res.json({
+    daily, weekly: await grp(`to_char(date_trunc('week',${X}),'YYYY-MM-DD')`, now - 84 * 864e5), monthly: await grp(`to_char(${X},'YYYY-MM')`, now - 366 * 864e5),
+    top: await q("SELECT c.id,c.title,c.username,COALESCE(SUM(i.price),0) gross,COUNT(i.id) posts,COALESCE(SUM(i.clicks),0) clicks FROM items i JOIN channels c ON c.id=i.channel_id WHERE i.status IN('live','closing','done') GROUP BY c.id ORDER BY gross DESC LIMIT 8"),
+    advertisers: await q("SELECT u.id,u.name,u.username,COUNT(*) n,COALESCE(SUM(o.total) FILTER (WHERE o.status IN('active','done')),0) spent FROM orders o JOIN users u ON u.id=o.user_id WHERE o.status IN('review','active','done') GROUP BY u.id ORDER BY spent DESC, n DESC LIMIT 8"),
+    conv: await one("SELECT COUNT(*) total, COUNT(*) FILTER (WHERE status IN('review','active','done')) paid, COUNT(*) FILTER (WHERE status='done') done, COUNT(*) FILTER (WHERE status='rejected') rejected, COUNT(DISTINCT user_id) buyers, (SELECT COUNT(*) FROM users) users FROM orders")
+  });
+}));
+
+// ----- In-app notifications (the same events the bot sends) -----
+app.get('/api/notifications', auth, h(async (req, res) => res.json({
+  items: await q('SELECT id,type,title,body,created,seen FROM notifications WHERE user_id=$1 AND id>$2 ORDER BY id DESC LIMIT 30', [req.uid, +req.query.after || 0]),
+  unread: (await one('SELECT COUNT(*) n FROM notifications WHERE user_id=$1 AND seen=0', [req.uid])).n
+})));
+app.post('/api/notifications/read', auth, h(async (req, res) => { await q('UPDATE notifications SET seen=1 WHERE user_id=$1 AND seen=0', [req.uid]); res.json({ ok: true }); }));
 
 // ---------- Posting + escrow ----------
 const closeIfDone = async oid => { if (!(await one("SELECT 1 FROM items WHERE order_id=$1 AND status IN('queued','posting','live','closing')", [oid]))) await q("UPDATE orders SET status='done' WHERE id=$1 AND status='active'", [oid]); };
@@ -576,7 +652,7 @@ async function tickExtras() {
     const b = await tg('getChatMember', { chat_id: c.chat_id, user_id: await botId() }).catch(() => null), ok = b && ['administrator', 'creator'].includes(b.status) ? 1 : 0;
     await q('UPDATE channels SET subs=COALESCE($1,subs), photo=COALESCE($2,photo), bot_ok=$3, subs_at=$4 WHERE id=$5', [n, (f && f.photo && f.photo.small_file_id) || null, ok, now, c.id]);
   }
-  if (now - lastClean > 3600e3) { lastClean = now; await q("DELETE FROM media m WHERE created<$1 AND NOT EXISTS(SELECT 1 FROM orders o WHERE o.photos LIKE '%'||m.id||'%') AND NOT EXISTS(SELECT 1 FROM payments p WHERE p.receipt=m.id)", [now - 2 * 864e5]); }
+  if (now - lastClean > 3600e3) { lastClean = now; await q('DELETE FROM notifications WHERE created<$1', [now - 30 * 864e5]); await q("DELETE FROM media m WHERE created<$1 AND NOT EXISTS(SELECT 1 FROM orders o WHERE o.photos LIKE '%'||m.id||'%') AND NOT EXISTS(SELECT 1 FROM payments p WHERE p.receipt=m.id)", [now - 2 * 864e5]); }
 }
 let lastTick = 0;
 const maybeTick = async () => { if (Date.now() - lastTick < 20000) return; lastTick = Date.now(); await tick().catch(e => console.log('tick', e.message)); };
@@ -637,33 +713,10 @@ async function onCallback(cb) {
     return done(r.error || (a === 'ra' ? 'Approved. It will post on schedule.' : 'Rejected. The advertiser was refunded.'));
   }
   if (!ADMINS.includes(cb.from.id)) return done('You are not an admin.');
-  let note = '';
-  if (a === 'oa') { // bank money received -> owner reviews
-    const o = await one("UPDATE orders SET status='review' WHERE id=$1 AND status='pending' RETURNING *", [id]);
-    if (!o) return done('Already handled.');
-    await q("UPDATE payments SET status='approved' WHERE order_id=$1 AND kind='order' AND status='pending'", [id]);
-    const c = await one('SELECT * FROM channels WHERE id=$1', [o.channel_id]);
-    await say2(o.user_id, 'review', 'AD' + id, esc(nm(c))); await askOwner(o); note = 'Sent to owner';
-  } else if (a === 'or') { // bank payment rejected (no money received)
-    const o = await one("UPDATE orders SET status='rejected' WHERE id=$1 AND status='pending' RETURNING *", [id]);
-    if (!o) return done('Already handled.');
-    await q("UPDATE items SET status='cancelled' WHERE order_id=$1 AND status='queued'", [id]);
-    await q("UPDATE payments SET status='rejected' WHERE order_id=$1 AND kind='order' AND status='pending'", [id]);
-    await releaseCoupon(o); await say2(o.user_id, 'rejected', 'AD' + id, false); note = 'Rejected';
-  } else if (a === 'ca' || a === 'cr') {
-    const c = await one("UPDATE channels SET status=$2 WHERE id=$1 AND status='pending' RETURNING *", [id, a === 'ca' ? 'approved' : 'rejected']);
-    if (!c) return done('Already handled.');
-    await say2(c.owner_id, a === 'ca' ? 'chan_ok' : 'chan_no', esc(nm(c))); note = a === 'ca' ? 'Approved' : 'Rejected';
-  } else if (a === 'wa' || a === 'wr') {
-    const w = await one("UPDATE withdrawals SET status=$2 WHERE id=$1 AND status='pending' RETURNING *", [id, a === 'wa' ? 'paid' : 'rejected']);
-    if (!w) return done('Already handled.');
-    if (a === 'wa') { await say2(w.user_id, 'wd_paid', birr(w.amount), w.method); note = 'Paid'; }
-    else { await credit(w.user_id, w.amount, 'refund', `withdrawal #${id} rejected`); await say2(w.user_id, 'wd_rej', birr(w.amount)); note = 'Rejected'; }
-  } else if (a === 'pa' || a === 'pr') {
-    const p = await one("UPDATE payments SET status=$2 WHERE id=$1 AND kind='topup' AND status='pending' RETURNING *", [id, a === 'pa' ? 'approved' : 'rejected']);
-    if (!p) return done('Already handled.');
-    if (a === 'pa') { await credit(p.user_id, p.amount, 'topup', '#' + id); await say2(p.user_id, 'topup_ok', birr(p.amount)); note = 'Approved'; } else { await say2(p.user_id, 'topup_no'); note = 'Rejected'; }
-  }
+  const MAP = { oa: ['order', 1], or: ['order', 0], ca: ['channel', 1], cr: ['channel', 0], wa: ['withdraw', 1], wr: ['withdraw', 0], pa: ['topup', 1], pr: ['topup', 0] }, mp = MAP[a];
+  if (!mp) return done();
+  const note = await adminDecide(mp[0], id, !!mp[1]);
+  if (!note) return done('Already handled.');
   await mark(note); await done(note);
 }
 const handle = async u => { if (u.message) await onMessage(u.message); if (u.channel_post) await onMessage(u.channel_post); if (u.callback_query) await onCallback(u.callback_query); };

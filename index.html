@@ -146,6 +146,11 @@ nav button .i{width:24px;height:24px}nav button.on{color:var(--p)}nav .dot{posit
 @keyframes dr{to{stroke-dashoffset:0}}@keyframes fi{to{opacity:1}}@keyframes rise{to{opacity:1;transform:none}}@keyframes sp{from{transform:rotate(-200deg)}to{transform:rotate(0)}}
 @media(prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}.skel{animation:none}.toast{transition:none}}
 @media(max-width:340px){.seg button{padding:8px 9px;font-size:13px}.wchip{padding:0 10px}.hrs{gap:4px}}
+.ib{position:relative}.nb{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;border-radius:9px;background:var(--coral);color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;padding:0 4px}
+.nt{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}.nt:first-child{border-top:0}.nic{width:38px;height:38px;border-radius:12px;background:var(--soft);display:grid;place-items:center;flex:none;color:var(--p)}.nt.new .nic{background:var(--p);color:#fff}
+.cht{width:100%;height:auto;display:block;margin-top:10px}.cht rect{fill:var(--p)}.cht text{fill:var(--mute);font-size:9px}
+.hb{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px}.hb span{flex:none;width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hb .bw{flex:1;height:8px;border-radius:6px;background:var(--soft)}.hb i{display:block;height:8px;border-radius:6px;background:var(--p)}.hb b{flex:none}
+.rcp{width:100%;max-height:220px;object-fit:contain;border-radius:12px;background:var(--soft);margin-top:8px}
 </style>
 </head>
 <body data-mode="advertiser">
@@ -183,6 +188,9 @@ nav button .i{width:24px;height:24px}nav button.on{color:var(--p)}nav .dot{posit
 <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></symbol>
 <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
 <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M5 3l14 7-6 2-2 6z"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
 </defs></svg>
 <header class="top"><div class="shell" id="top"></div></header>
 <main><div class="shell" id="view"><div class="skel"></div><div class="skel"></div></div></main>
@@ -264,7 +272,7 @@ function bubble(o, ch) { // live Telegram-style preview
 
 // ---------- state ----------
 const qs = new URLSearchParams(location.search), sp = (tg.initDataUnsafe && tg.initDataUnsafe.start_param) || '';
-const S = { me: null, mode: qs.get('mode') === 'publisher' || qs.get('tab') === 'queue' ? 'publisher' : 'advertiser', tab: 'explore', channels: [], mine: { channels: [], orders: [], stats: {} }, wallet: { payments: [], ledger: [] }, queue: null, qf: 'pending', q: '', cat: 'all', sort: 'pop', flow: null, wtab: 'topup', method: 'Telebirr', tf: { amount: '', tx: '', sn: '', sp: '', receipt: null }, cs: 0, csf: null, addKind: 'channel', open: {} };
+const S = { me: null, mode: qs.get('mode') === 'publisher' || qs.get('tab') === 'queue' ? 'publisher' : 'advertiser', tab: 'explore', channels: [], mine: { channels: [], orders: [], stats: {} }, wallet: { payments: [], ledger: [] }, queue: null, qf: 'pending', q: '', cat: 'all', sort: 'pop', flow: null, wtab: 'topup', method: 'Telebirr', tf: { amount: '', tx: '', sn: '', sp: '', receipt: null }, cs: 0, csf: null, addKind: 'channel', open: {}, notif: { items: [], unread: 0, last: 0 }, mf: { type: 'all', pmin: '', pmax: '', smin: '', smax: '', show: false }, at: 'stats', ap: 'daily', au: '' };
 S.tab = S.mode === 'publisher' ? (qs.get('tab') === 'queue' ? 'queue' : 'over') : 'explore';
 const ST = { pending: ['Payment check', 'amber', 'clock'], review: ['Owner review', 'amber', 'clock'], active: ['Active', 'blue', 'play'], done: ['Completed', 'green', 'check'], rejected: ['Rejected', 'coral', 'x'], approved: ['Approved', 'green', 'check'], live: ['Live', 'blue', 'play'], queued: ['Scheduled', 'amber', 'clock'], posting: ['Posting', 'blue', 'clock'], failed: ['Failed', 'coral', 'x'], missed: ['Missed', 'coral', 'x'], removed: ['Removed', 'coral', 'x'], closing: ['Finishing', 'blue', 'clock'], paid: ['Paid', 'green', 'check'], cancelled: ['Cancelled', 'coral', 'x'] };
 const badge = s => { const [x, c, i] = ST[s] || [s, 'mute', 'clock']; return `<span class="badge b-${c}">${ico(i)}${x}</span>`; };
@@ -279,10 +287,10 @@ function dial(stateOf) { // 24 hour grid; stateOf(h) -> '', 'on', 'taken', 'off'
 const NAVS = { advertiser: [['explore', 'compass', 'Explore'], ['ads', 'spark', 'Campaigns'], ['wallet', 'wallet', 'Wallet']], publisher: [['over', 'grid', 'Overview'], ['chan', 'chan', 'Channels'], ['add', 'addc', 'Add chat'], ['queue', 'shield', 'Queue']] };
 function drawTop() {
   document.body.dataset.mode = S.mode; const m = S.me;
-  $('#top').innerHTML = `<div class="seg"><button data-m="advertiser" class="${S.mode === 'advertiser' ? 'on' : ''}">Advertiser</button><button data-m="publisher" class="${S.mode === 'publisher' ? 'on' : ''}">Publisher</button></div><span class="sp"></span><button class="ib" id="tm" aria-label="Dark mode">${ico('moon')}</button><button class="wchip" id="wc">${ico('wallet')}<span>${nf(m ? m.me.balance : 0)} ETB</span></button>`;
+  $('#top').innerHTML = `<div class="seg"><button data-m="advertiser" class="${S.mode === 'advertiser' ? 'on' : ''}">Advertiser</button><button data-m="publisher" class="${S.mode === 'publisher' ? 'on' : ''}">Publisher</button></div><span class="sp"></span><button class="ib" id="tm" aria-label="Dark mode">${ico('moon')}</button><button class="ib" id="bl" aria-label="Notifications">${ico('bell')}${S.notif.unread ? `<span class="nb">${S.notif.unread > 99 ? '99+' : S.notif.unread}</span>` : ''}</button><button class="wchip" id="wc">${ico('wallet')}<span>${nf(m ? m.me.balance : 0)} ETB</span></button>`;
   $$('[data-m]').forEach(b => b.onclick = () => { S.mode = b.dataset.m; S.tab = S.mode === 'publisher' ? 'over' : 'explore'; hap(); render(); scrollTo(0, 0); });
   $('#tm').onclick = () => { theme = theme === 'dark' ? 'light' : 'dark'; ls.set('theme', theme); applyTheme(); };
-  $('#wc').onclick = () => go(S.mode === 'publisher' ? 'over' : 'wallet');
+  $('#wc').onclick = () => go(S.mode === 'publisher' ? 'over' : 'wallet'); $('#bl').onclick = () => go('notif');
 }
 function drawNav() {
   const tabs = [...NAVS[S.mode]]; if (S.mode === 'publisher' && S.me && S.me.isAdmin) tabs.push(['admin', 'cog', 'Admin']);
@@ -296,7 +304,7 @@ function render() {
   drawTop(); drawNav();
   const inFlow = S.mode === 'advertiser' && S.tab === 'explore' && S.flow;
   $('nav').style.display = inFlow ? 'none' : ''; document.body.classList.toggle('flow', !!inFlow); barwrap.innerHTML = '';
-  ({ explore: vExplore, ads: vAds, wallet: vWallet, over: vOver, chan: vChan, add: vAdd, queue: vQueue, admin: vAdmin })[S.tab]();
+  ({ explore: vExplore, ads: vAds, wallet: vWallet, over: vOver, chan: vChan, add: vAdd, queue: vQueue, admin: vAdmin, notif: vNotif })[S.tab]();
 }
 async function load() {
   const [me, ch, mine, wal] = await Promise.all([api('/me'), api('/channels'), api('/mine'), api('/wallet')]);
@@ -308,18 +316,35 @@ async function load() {
 // ---------- Explore + booking flow ----------
 const newFlow = (ch, p) => ({ ch, step: 1, max: 1, pkg: null, date: eatToday(), hours: [], taken: null, off: [], budget: 300, kind: p ? p.kind : 'text', label: p ? p.label : '', html: p ? p.html : '', pm: p ? p.parse_mode : 'HTML', photos: p ? p.photos.map(id => ({ id, url: '/media/' + id })) : [], btnT: p ? p.btn_text : '', btnU: p ? p.btn_url : '', pv: false, pay: 'wallet', tx: '', sn: '', sp: '', receipt: null, coupon: '', cpCode: '', cp: 0, busy: false, done: null });
 function openFlow(c, prev) { S.mode = 'advertiser'; S.tab = 'explore'; S.flow = newFlow(c, prev); render(); scrollTo(0, 0); }
-const sortList = () => { const f = S.q.trim().toLowerCase(); return S.channels.filter(c => (S.cat === 'all' || c.category === S.cat) && (!f || (c.title + ' ' + c.username).toLowerCase().includes(f))).sort((a, b) => S.sort === 'lo' ? a.prices.single - b.prices.single : S.sort === 'hi' ? b.prices.single - a.prices.single : b.subs - a.subs); };
-const chList = l => l.length ? l.map(c => `<button class="ch" data-id="${c.id}">${av(c)}<div class="m"><b>${esc(c.title)}</b><small>${kfmt(c.subs)} members · ${cap(c.category)}${c.type !== 'channel' ? ' · Group' : ''}</small></div><div class="pr"><b>${nf(c.prices.single)} ETB</b><small>per post</small></div></button>`).join('') : empty('compass', S.channels.length ? 'No match for your search' : 'No channels are listed yet');
+const SORTS = { pop: (a, b) => b.subs - a.subs, few: (a, b) => a.subs - b.subs, lo: (a, b) => a.prices.single - b.prices.single, hi: (a, b) => b.prices.single - a.prices.single, ck: (a, b) => a.cpc - b.cpc };
+const sortList = () => {
+  const t = S.q.trim().toLowerCase(), F = S.mf, n = v => v === '' || v == null ? null : +v, pmin = n(F.pmin), pmax = n(F.pmax), smin = n(F.smin), smax = n(F.smax);
+  return S.channels.filter(c => (S.cat === 'all' || c.category === S.cat) && (F.type === 'all' || (F.type === 'channel') === (c.type === 'channel')) && (!t || (c.title + ' ' + c.username).toLowerCase().includes(t))
+    && (pmin == null || c.prices.single >= pmin) && (pmax == null || c.prices.single <= pmax) && (smin == null || c.subs >= smin) && (smax == null || c.subs <= smax)).sort(SORTS[S.sort] || SORTS.pop);
+};
+const chList = l => l.length ? l.map(c => `<button class="ch" data-id="${c.id}">${av(c)}<div class="m"><b>${esc(c.title)}</b><small>${kfmt(c.subs)} members · ${cap(c.category)}${c.type !== 'channel' ? ' · Group' : ''}</small></div><div class="pr"><b>${nf(c.prices.single)} ETB</b><small>per post · ${nf(c.cpc)}/click</small></div></button>`).join('') : empty('compass', S.channels.length ? 'No match for your search or filters' : 'No channels are listed yet');
 function vExplore() {
   if (S.flow) return vFlow();
-  view.innerHTML = `<div class="rowh"><h2>Find a channel</h2></div><div class="search">${ico('search')}<input id="q" placeholder="Search channels and groups" value="${esc(S.q)}"></div>
+  const F = S.mf, act = ['pmin', 'pmax', 'smin', 'smax'].filter(k => F[k] !== '').length + (F.type !== 'all' ? 1 : 0);
+  view.innerHTML = `<div class="rowh"><h2>Find a channel</h2><button class="chip ${F.show || act ? 'on' : ''}" id="ft">${ico('filter')} Filters${act ? ' · ' + act : ''}</button></div><div class="search">${ico('search')}<input id="q" placeholder="Search channels and groups" value="${esc(S.q)}"></div>
+  ${F.show ? `<div class="card"><div class="hs">${[['all', 'All'], ['channel', 'Channels'], ['group', 'Groups']].map(([k, n]) => `<button class="chip ${F.type === k ? 'on' : ''}" data-ty="${k}">${n}</button>`).join('')}</div>
+  <label class="l" style="margin-top:4px">Budget per post (ETB)</label><div class="g2"><input id="pmin" type="number" inputmode="numeric" placeholder="Min" value="${esc(F.pmin)}"><input id="pmax" type="number" inputmode="numeric" placeholder="Max" value="${esc(F.pmax)}"></div>
+  <label class="l">Followers / members</label><div class="g2"><input id="smin" type="number" inputmode="numeric" placeholder="Min" value="${esc(F.smin)}"><input id="smax" type="number" inputmode="numeric" placeholder="Max" value="${esc(F.smax)}"></div>
+  <button class="btn soft sm" id="fr" style="margin-top:12px">Reset filters</button></div>` : ''}
   <div class="hs" id="cats">${['all', ...S.me.cats].map(c => `<button class="chip ${S.cat === c ? 'on' : ''}" data-c="${c}">${cap(c)}</button>`).join('')}</div>
-  <div class="hs" id="sorts">${[['pop', 'Most members'], ['lo', 'Lowest price'], ['hi', 'Highest price']].map(([k, n]) => `<button class="chip ${S.sort === k ? 'on' : ''}" data-s="${k}">${n}</button>`).join('')}</div>
-  <div id="list">${chList(sortList())}</div><div class="soon">${ico('spark')}<span>Facebook, Instagram and TikTok ads are coming soon.</span></div>`;
-  $('#q').oninput = e => { S.q = e.target.value; $('#list').innerHTML = chList(sortList()); bindList(); };
+  <div class="hs" id="sorts">${[['pop', 'Most members'], ['few', 'Fewest members'], ['lo', 'Lowest price'], ['hi', 'Highest price'], ['ck', 'Cheapest click']].map(([k, n]) => `<button class="chip ${S.sort === k ? 'on' : ''}" data-s="${k}">${n}</button>`).join('')}</div>
+  <div class="sub" id="cnt" style="margin:0 0 8px"></div><div id="list"></div><div class="soon">${ico('spark')}<span>Facebook, Instagram and TikTok ads are coming soon.</span></div>`;
+  const upd = () => { const l = sortList(); $('#list').innerHTML = chList(l); $('#cnt').textContent = l.length + ' found'; bindList(); };
+  $('#q').oninput = e => { S.q = e.target.value; upd(); };
+  $('#ft').onclick = () => { F.show = !F.show; vExplore(); };
   $$('#cats .chip').forEach(b => b.onclick = () => { S.cat = b.dataset.c; hap(); vExplore(); });
   $$('#sorts .chip').forEach(b => b.onclick = () => { S.sort = b.dataset.s; hap(); vExplore(); });
-  bindList();
+  if (F.show) {
+    ['pmin', 'pmax', 'smin', 'smax'].forEach(k => $('#' + k).oninput = e => { F[k] = e.target.value; upd(); });
+    $$('[data-ty]').forEach(b => b.onclick = () => { F.type = b.dataset.ty; vExplore(); });
+    $('#fr').onclick = () => { Object.assign(F, { type: 'all', pmin: '', pmax: '', smin: '', smax: '' }); vExplore(); };
+  }
+  upd();
 }
 const bindList = () => $$('#list .ch').forEach(b => b.onclick = () => { hap(); openFlow(S.channels.find(c => c.id === +b.dataset.id)); });
 const flowTotals = f => { const p = pkOf(f.pkg), gross = p ? (p.cpc ? +f.budget || 0 : f.ch.prices[f.pkg] || 0) : 0, disc = Math.round(gross * f.cp) / 100; return { p, gross, disc, total: Math.round((gross - disc) * 100) / 100, posts: p ? f.hours.length * p.days : 0 }; };
@@ -589,16 +614,81 @@ async function vQueue() {
     if (!ok && tg.showConfirm) tg.showConfirm('Reject this ad and refund the advertiser?', y => y && run()); else run(); };
   $$('[data-ap]').forEach(b => b.onclick = dec(+b.dataset.ap, true)); $$('[data-rj]').forEach(b => b.onclick = dec(+b.dataset.rj, false));
 }
+const AT = [['stats', 'Overview'], ['appr', 'Approvals'], ['users', 'Users'], ['coup', 'Coupons'], ['an', 'Analytics']];
+const who = (id, name, un) => esc(un ? '@' + un : name || String(id)) + ' · ' + id;
+const pct = (a, b) => b ? Math.round(a / b * 1000) / 10 : 0;
+function bars(rows, val, lab) {
+  if (!rows.length) return empty('chart', 'No data yet');
+  const W = 320, H = 110, m = Math.max(1, ...rows.map(val)), n = rows.length, bw = W / n;
+  return `<svg class="cht" viewBox="0 0 ${W} ${H + 16}">${rows.map((r, i) => { const h = Math.round(val(r) / m * H); return `<rect x="${(i * bw + bw * .15).toFixed(1)}" y="${H - h}" width="${(bw * .7).toFixed(1)}" height="${Math.max(h, val(r) > 0 ? 2 : 0)}" rx="2"><title>${esc(lab(r))}: ${nf(val(r))}</title></rect>`; }).join('')}<text x="0" y="${H + 12}">${esc(lab(rows[0]))}</text><text x="${W}" y="${H + 12}" text-anchor="end">${esc(lab(rows[n - 1]))}</text></svg>`;
+}
+const hbars = (rows, val, lab, sub) => rows.length ? rows.map(r => `<div class="hb"><span>${esc(lab(r))}</span><div class="bw"><i style="width:${Math.max(3, Math.round(val(r) / Math.max(1, val(rows[0])) * 100))}%"></i></div><b>${sub(r)}</b></div>`).join('') : empty('chart', 'No data yet');
 async function vAdmin() {
-  view.innerHTML = '<div class="skel"></div><div class="skel"></div>';
-  const r = await api('/admin/stats'); if (r.error) { view.innerHTML = `<div class="card empty">${ico('warn')}<div>${esc(r.error)}</div></div>`; return; } const s = r.stats;
-  view.innerHTML = `<div class="rowh"><h2>Admin</h2></div><div class="card"><div class="g2"><div class="stat"><small>Users</small><b>${s.users}</b></div><div class="stat"><small>Channels</small><b>${s.channels}</b></div><div class="stat"><small>Live posts</small><b>${s.live}</b></div><div class="stat"><small>In owner review</small><b>${s.in_review}</b></div></div><div class="stat" style="margin-top:10px"><small>Revenue</small><b style="color:var(--p)">${nf(s.revenue)} ETB</b></div></div>
-  <div class="card"><div class="sec">Waiting for you</div><div class="sub">Approve with the buttons in the bot chat.</div><div class="g2" style="margin-top:10px"><div class="stat"><small>Bank payments</small><b>${r.pendingOrders.length}</b></div><div class="stat"><small>Top-ups</small><b>${r.pendingTopups.length}</b></div><div class="stat"><small>Channels</small><b>${r.pendingChannels.length}</b></div><div class="stat"><small>Withdrawals</small><b>${r.pendingWd.length}</b></div></div></div>
-  <div class="card"><div class="sec">${ico('shield')}Block or unblock</div><input id="uid" inputmode="numeric" placeholder="User ID" style="margin-top:8px"><div class="two"><button class="btn red sm" id="bn">Block</button><button class="btn soft sm" id="ub">Unblock</button></div></div>
-  <div class="card"><div class="sec">Coupons</div>${r.coupons.map(c => `<div class="row"><div class="m"><b>${esc(c.code)}</b><br><small>${c.percent}% · ${c.uses} uses left</small></div></div>`).join('')}<label class="l">Code</label><input id="cc" autocapitalize="characters"><div class="g2"><div><label class="l">Percent</label><input id="cp" type="number" inputmode="numeric" placeholder="10"></div><div><label class="l">Uses</label><input id="cu" type="number" inputmode="numeric" placeholder="50"></div></div><button class="btn" id="sc">Save coupon</button></div>`;
-  const ban = v => async () => { const x = await api('/admin/ban', { user_id: $('#uid').value, ban: v }); x.error ? toast(x.error, true) : toast('Done'); };
-  $('#bn').onclick = ban(true); $('#ub').onclick = ban(false);
-  $('#sc').onclick = async () => { const x = await api('/admin/coupon', { code: $('#cc').value, percent: $('#cp').value, uses: $('#cu').value }); x.error ? toast(x.error, true) : (toast('Done'), vAdmin()); };
+  const t = S.at, hd = `<div class="rowh"><h2>Admin</h2><button class="ib" id="rf" aria-label="Refresh">${ico('refresh')}</button></div><div class="hs">${AT.map(([k, n]) => `<button class="chip ${t === k ? 'on' : ''}" data-at="${k}">${n}</button>`).join('')}</div>`;
+  view.innerHTML = hd + '<div class="skel"></div><div class="skel"></div>';
+  const bindHd = () => { $('#rf').onclick = vAdmin; $$('[data-at]').forEach(b => b.onclick = () => { S.at = b.dataset.at; vAdmin(); }); };
+  const r = t === 'appr' ? await api('/admin/queue') : t === 'users' ? await api('/admin/users?q=' + encodeURIComponent(S.au)) : t === 'an' ? await api('/admin/analytics') : await api('/admin/stats');
+  if (r.error) { view.innerHTML = hd + `<div class="card empty">${ico('warn')}<div>${esc(r.error)}</div></div>`; bindHd(); return; }
+  let h = '';
+  if (t === 'stats') {
+    const s = r.stats;
+    h = `<div class="card"><div class="g2"><div class="stat"><small>Users</small><b>${s.users}</b></div><div class="stat"><small>Channels</small><b>${s.channels}</b></div><div class="stat"><small>Live posts</small><b>${s.live}</b></div><div class="stat"><small>In owner review</small><b>${s.in_review}</b></div></div><div class="stat" style="margin-top:10px"><small>Revenue</small><b style="color:var(--p)">${nf(s.revenue)} ETB</b></div></div>
+    <div class="card"><div class="sec">Waiting for you</div><div class="sub">Tap to open Approvals. Buttons in the bot chat still work too.</div><div class="g2" style="margin-top:10px">${[['Bank payments', r.pendingOrders], ['Top-ups', r.pendingTopups], ['Channels', r.pendingChannels], ['Withdrawals', r.pendingWd]].map(([n, l]) => `<button class="stat" data-at="appr" style="border:0;text-align:left"><small>${n}</small><b style="color:${l.length ? 'var(--coral)' : 'inherit'}">${l.length}</b></button>`).join('')}</div></div>`;
+  } else if (t === 'appr') {
+    const act = (k, id) => `<div class="two"><button class="btn red sm" data-d="${k}:${id}:0">${ico('x')}Reject</button><button class="btn sm" data-d="${k}:${id}:1">${ico('check')}Approve</button></div>`;
+    const rc = x => x ? `<a href="/media/${esc(x)}" target="_blank"><img class="rcp" src="/media/${esc(x)}" loading="lazy" alt="Receipt"></a>` : '';
+    const sec = (title, arr, fn) => arr.length ? `<div class="card"><div class="sec">${title} <span class="badge b-amber" style="margin-left:auto">${arr.length}</span></div>${arr.map(x => `<div class="box">${fn(x)}</div>`).join('')}</div>` : '';
+    h = sec('Bank payments', r.orders, o => `<div class="r"><b>AD${o.id}</b><b class="pt">${nf(o.total)} ETB</b></div><div class="sub">${esc(o.ctitle)} · ${esc((pkOf(o.pkg) || {}).name || o.pkg || '')}${o.discount ? ' · discount ' + nf(o.discount) : ''}</div><div class="sub">${who(o.user_id, o.uname, o.uuser)}</div><div class="sub">Tx: <b>${esc(o.tx_number || '-')}</b> · ${esc(o.sender_name || '')} ${esc(o.sender_phone || '')}</div>${rc(o.receipt)}<p class="sub" style="margin:8px 0 0">Approve only if the money arrived. The channel owner then reviews the ad.</p>${act('order', o.id)}`)
+      + sec('Top-ups', r.topups, p => `<div class="r"><b>#${p.id}</b><b class="pt">${nf(p.amount)} ETB</b></div><div class="sub">${who(p.user_id, p.uname, p.uuser)}</div><div class="sub">Tx: <b>${esc(p.tx_number || '-')}</b> · ${esc(p.sender_name || '')} ${esc(p.sender_phone || '')}</div>${rc(p.receipt)}${act('topup', p.id)}`)
+      + sec('Channel approvals', r.channels, c => `<div class="r"><b>${esc(c.title)}</b><span class="tag">${c.type === 'channel' ? 'Channel' : 'Group'}</span></div><div class="sub">${c.username ? '@' + esc(c.username) + ' · ' : ''}${nf(c.subs)} members</div><div class="sub">Owner: ${who(c.owner_id, c.uname, c.uuser)}</div>${act('channel', c.id)}`)
+      + sec('Withdrawals', r.withdrawals, w => `<div class="r"><b>#${w.id}</b><b class="pt">${nf(w.amount)} ETB</b></div><div class="sub">${who(w.user_id, w.uname, w.uuser)}</div><div class="sub">${esc(w.method)}: <b>${esc(w.account)}</b></div><div class="two"><button class="btn red sm" data-d="withdraw:${w.id}:0">${ico('x')}Reject + refund</button><button class="btn sm" data-d="withdraw:${w.id}:1">${ico('check')}Mark paid</button></div>`);
+    if (!h) h = `<div class="card">${empty('shield', 'Nothing is waiting for you')}</div>`;
+  } else if (t === 'users') {
+    h = `<div class="card"><div class="search" style="margin:0">${ico('search')}<input id="us" placeholder="User ID, name or @username" value="${esc(S.au)}"></div><button class="btn sm" id="ug" style="margin-top:10px">Search</button></div>
+    <div class="card">${r.users.length ? r.users.map(u => `<div class="row"><div class="m"><b>${esc(u.name || 'User')}</b> ${u.banned ? '<span class="badge b-coral">Blocked</span>' : ''}<br><small>${u.id}${u.username ? ' · @' + esc(u.username) : ''} · ${nf(u.balance)} ETB</small></div><button class="btn sm ${u.banned ? 'soft' : 'red'}" style="width:auto;padding:0 14px;height:40px" data-b="${u.id}:${u.banned ? 0 : 1}">${u.banned ? 'Unblock' : 'Block'}</button></div>`).join('') : empty('users', 'No users found')}</div>`;
+  } else if (t === 'coup') {
+    h = `<div class="card"><div class="sec">Coupons</div>${r.coupons.length ? r.coupons.map(c => `<div class="row"><div class="m"><b>${esc(c.code)}</b><br><small>${c.percent}% · ${c.uses} uses left</small></div><button class="btn red sm" style="width:auto;padding:0 14px;height:40px" data-cd="${esc(c.code)}">${ico('trash')}</button></div>`).join('') : empty('gift', 'No coupons yet')}</div>
+    <div class="card"><div class="sec">Create or update</div><label class="l">Code</label><input id="cc" autocapitalize="characters"><div class="g2"><div><label class="l">Percent</label><input id="cp" type="number" inputmode="numeric" placeholder="10"></div><div><label class="l">Uses</label><input id="cu" type="number" inputmode="numeric" placeholder="50"></div></div><button class="btn" id="sc">Save coupon</button><p class="sub">Saving an existing code replaces its percent and uses.</p></div>`;
+  } else {
+    const PS = { daily: ['Daily', r.daily, x => x.k.slice(5)], weekly: ['Weekly', r.weekly, x => 'wk ' + x.k.slice(5)], monthly: ['Monthly', r.monthly, x => x.k] }, P = PS[S.ap] || PS.daily, sh = 100 - S.me.ownerShare, c = r.conv;
+    const rev = P[1].reduce((a, x) => a + x.rev, 0), ord = P[1].reduce((a, x) => a + x.n, 0);
+    h = `<div class="hs">${Object.entries({ daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly' }).map(([k, n]) => `<button class="chip ${S.ap === k ? 'on' : ''}" data-ap="${k}">${n}</button>`).join('')}</div>
+    <div class="card"><div class="sec">${ico('spark')}${P[0]} revenue</div><div class="g3" style="margin-top:8px"><div class="stat"><small>Revenue</small><b>${nf(rev)}</b></div><div class="stat"><small>Earnings (${sh}%)</small><b style="color:var(--p)">${nf(rev * sh / 100)}</b></div><div class="stat"><small>Orders</small><b>${ord}</b></div></div>${bars(P[1], x => x.rev, P[2])}</div>
+    <div class="card"><div class="sec">${ico('chan')}Top channels</div><div class="sub">By ad value posted</div>${hbars(r.top, x => x.gross, x => x.title, x => nf(x.gross) + ' ETB')}</div>
+    <div class="card"><div class="sec">${ico('users')}Advertiser activity</div><div class="sub">Most active advertisers</div>${r.advertisers.length ? r.advertisers.map(a => `<div class="row"><div class="m"><b>${esc(a.username ? '@' + a.username : a.name || a.id)}</b><br><small>${a.n} order${a.n === 1 ? '' : 's'}</small></div><b>${nf(a.spent)} ETB</b></div>`).join('') : empty('users', 'No orders yet')}</div>
+    <div class="card"><div class="sec">${ico('check')}Conversion rate</div><div class="g3" style="margin-top:8px"><div class="stat"><small>Order → paid</small><b>${pct(c.paid, c.total)}%</b></div><div class="stat"><small>Paid → done</small><b>${pct(c.done, c.paid)}%</b></div><div class="stat"><small>Users who booked</small><b>${pct(c.buyers, c.users)}%</b></div></div><div class="sub" style="margin-top:8px">${c.total} orders · ${c.paid} paid · ${c.done} completed · ${c.rejected} rejected · ${c.buyers} of ${c.users} users booked</div></div>`;
+  }
+  view.innerHTML = hd + h; bindHd();
+  $$('[data-ap]').forEach(b => b.onclick = () => { S.ap = b.dataset.ap; vAdmin(); });
+  $$('[data-d]').forEach(b => b.onclick = () => { const [k, id, a] = b.dataset.d.split(':'), ok = a === '1';
+    const run = async () => { b.disabled = true; const x = await api('/admin/decide', { kind: k, id: +id, approve: ok }); x.error ? toast(x.error, true) : toast(x.note); vAdmin(); };
+    if (!ok && tg.showConfirm) tg.showConfirm('Reject this request?', y => y && run()); else run(); });
+  if (t === 'users') {
+    const go2 = () => { S.au = $('#us').value.trim(); vAdmin(); }; $('#ug').onclick = go2; $('#us').onkeydown = e => { if (e.key === 'Enter') go2(); };
+    $$('[data-b]').forEach(b => b.onclick = async () => { const [id, v] = b.dataset.b.split(':'); b.disabled = true; const x = await api('/admin/ban', { user_id: id, ban: v === '1' }); x.error ? toast(x.error, true) : toast(v === '1' ? 'User blocked' : 'User unblocked'); vAdmin(); });
+  }
+  if (t === 'coup') {
+    $('#sc').onclick = async () => { const x = await api('/admin/coupon', { code: $('#cc').value, percent: $('#cp').value, uses: $('#cu').value }); x.error ? toast(x.error, true) : (toast('Saved'), vAdmin()); };
+    $$('[data-cd]').forEach(b => b.onclick = () => { const run = async () => { await api('/admin/coupon/delete', { code: b.dataset.cd }); toast('Deleted'); vAdmin(); }; tg.showConfirm ? tg.showConfirm('Delete coupon ' + b.dataset.cd + '?', y => y && run()) : run(); });
+  }
+}
+
+// ---------- Notifications ----------
+const NI = { live: 'play', fin_adv: 'check', fin_own: 'wallet', review: 'check', booked: 'cal', approved: 'check', rejected: 'x', expired: 'warn', refund_fail: 'warn', missed: 'warn', removed_own: 'warn', removed_adv: 'warn', cpc_back: 'wallet', ref: 'gift', chan_ok: 'check', chan_no: 'x', wd_paid: 'send', wd_rej: 'x', topup_ok: 'wallet', topup_no: 'x' };
+async function pollNotif(first) {
+  if (!S.me) return; const N = S.notif, r = await api('/notifications?after=' + N.last); if (r.error || !r.items) return;
+  N.unread = r.unread;
+  if (r.items.length) {
+    N.last = Math.max(N.last, ...r.items.map(x => x.id)); N.items = [...r.items, ...N.items].slice(0, 60);
+    if (!first) { toast(r.items[0].title + ' — ' + r.items[0].body); if (['ads', 'wallet', 'over', 'chan'].includes(S.tab) && !document.body.classList.contains('typing')) { await load(); return; } }
+  }
+  drawTop();
+}
+async function vNotif() {
+  const N = S.notif;
+  view.innerHTML = `<div class="rowh"><h2>Notifications</h2><button class="ib" id="rf" aria-label="Refresh">${ico('refresh')}</button></div><div class="card">${N.items.length ? N.items.map(n => `<div class="nt ${n.seen ? '' : 'new'}"><span class="nic">${ico(NI[n.type] || 'bell')}</span><div style="flex:1"><b>${esc(n.title)}</b><div class="sub">${esc(n.body)}</div><div class="sub" style="font-size:12px">${dtime(n.created)}</div></div></div>`).join('') : empty('bell', 'No notifications yet')}</div>`;
+  $('#rf').onclick = async () => { await pollNotif(); vNotif(); };
+  if (N.unread) { await api('/notifications/read', {}); N.unread = 0; drawTop(); setTimeout(() => N.items.forEach(x => x.seen = 1), 0); }
 }
 
 // ---------- start ----------
@@ -608,14 +698,15 @@ const seen = (() => { try { return sessionStorage.getItem('sp'); } catch (e) { r
 const t0 = Date.now(), minShow = seen ? 0 : 1700;
 if (seen) $('#splash').classList.add('out'); else try { sessionStorage.setItem('sp', '1'); } catch (e) {}
 async function boot() {
-  await load();
+  await load(); await pollNotif(true);
   const ch = qs.get('ch') || (/^ch_(\d+)$/.exec(sp) || [])[1]; // advertiser link of a channel
   if (ch && S.me) { const c = S.channels.find(x => x.id === +ch); if (c) openFlow(c); else toast('This channel is not available right now.', true); }
   setTimeout(() => $('#splash').classList.add('out'), Math.max(0, minShow - (Date.now() - t0)));
 }
 boot();
-setInterval(() => { if (document.hidden || document.body.classList.contains('typing') || !S.me) return; if (S.tab === 'queue') vQueue(); else if (S.tab === 'ads') load(); }, 60000);
-document.addEventListener('visibilitychange', () => { if (!document.hidden && S.me && ['ads', 'wallet', 'over'].includes(S.tab)) load(); });
+setInterval(() => { if (document.hidden || document.body.classList.contains('typing') || !S.me) return; if (S.tab === 'queue') vQueue(); else if (S.tab === 'ads') load(); else if (S.tab === 'admin' && S.at === 'appr') vAdmin(); }, 60000);
+setInterval(() => { if (!document.hidden && S.me) pollNotif(); }, 15000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden && S.me) { pollNotif(); if (['ads', 'wallet', 'over'].includes(S.tab)) load(); } });
 </script>
 </body>
 </html>
